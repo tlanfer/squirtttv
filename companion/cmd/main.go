@@ -49,14 +49,12 @@ func main() {
 	timeout := time.Now()
 
 	for event := range events {
-		if time.Now().Before(timeout) {
-			log.Printf("Ignore %v (%v) -> Still on timeout for %v", event.EventType, event.Amount, timeout.Sub(time.Now()).Round(100*time.Millisecond))
-
-		}
 		if time.Now().After(timeout) && conf.Matches(event) {
 			timeout = time.Now().Add(conf.Cooldown)
 			log.Printf("Got some %v (%v) -> Squirt for %v", event.EventType, event.Amount, conf.Duration)
 			squirters.Squirt(conf.Duration)
+		} else {
+			log.Printf("Ignore %v (%v)", event.EventType, event.Amount)
 		}
 	}
 
