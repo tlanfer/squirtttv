@@ -1,6 +1,6 @@
 # Squirtianna
 
-This lets your squirt someone with water when something happens on twitch.
+This lets you squirt someone with water when something happens on twitch.
 
 ## Building the hardware
 
