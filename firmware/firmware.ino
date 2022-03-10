@@ -3,6 +3,7 @@
 #include <ESPAsyncTCP.h>
 #include <ESPAsyncWebServer.h>
 #include <ESPAsyncWiFiManager.h>
+#include "form.h"
 
 #define PUMP_PIN 12
 
@@ -38,12 +39,16 @@ void setupWifi(){
 
 void setupWebserver(){
 
+  server.on("/", HTTP_GET, [] (AsyncWebServerRequest *request) {
+    request->send(200, "text/html", indexhtml);
+  });
+
   server.on("/squirt", HTTP_GET, [] (AsyncWebServerRequest *request) {
     if (request->hasParam("duration")) {
       int duration = request->getParam("duration")->value().toInt();
       del = duration;
     }
-    request->send(200, "text/plain", "done");
+    request->redirect("/");
   });
 
   server.onNotFound([](AsyncWebServerRequest *request){
