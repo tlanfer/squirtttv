@@ -39,7 +39,8 @@ func main() {
 	}
 
 	if conf.Twitch != "" {
-		tc := twitchchat.New(conf.Twitch, twitchchat.WithFdgt(), twitchchat.WithFaker(3270*time.Millisecond))
+		//tc := twitchchat.New(conf.Twitch, twitchchat.WithFdgt(), twitchchat.WithFaker(3270*time.Millisecond))
+		tc := twitchchat.New(conf.Twitch)
 		tc.Connect(events)
 	}
 
