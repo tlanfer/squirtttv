@@ -5,6 +5,7 @@
 #include <ESPAsyncWiFiManager.h>
 #include "form.h"
 
+#define HOSTNAME "squirtianna"
 #define PUMP_PIN 12
 
 AsyncWebServer server(80);
@@ -24,7 +25,7 @@ void setupSerial(){
 
 void setupWifi(){
   AsyncWiFiManager wifiManager(&server,&dns);
-  wifiManager.autoConnect("Squirtianna");
+  wifiManager.autoConnect(HOSTNAME);
 
   // WiFi.mode(WIFI_STA);
   // WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
@@ -61,10 +62,10 @@ void setupWebserver(){
 }
 
 void setupMdns(){
-  if (!MDNS.begin("squirtianna")) {
+  if (!MDNS.begin(HOSTNAME)) {
     Serial.println("Error setting up MDNS responder!");
   }
-  MDNS.addService("squirtianna", "tcp", 80); // Announce esp tcp service on port 8080
+  MDNS.addService(HOSTNAME, "tcp", 80); // Announce esp tcp service on port 8080
   
   Serial.println("mDNS ready");
 }
@@ -78,9 +79,15 @@ void setup() {
 }
 
 void squirt(int t) {
-  digitalWrite(PUMP_PIN, HIGH);
+  digitalWrite(12, HIGH);
+  digitalWrite(13, HIGH);
+  digitalWrite(14, HIGH);
+  digitalWrite(15, HIGH);
   delay(t);
-  digitalWrite(PUMP_PIN, LOW);
+  digitalWrite(12, LOW);
+  digitalWrite(13, LOW);
+  digitalWrite(14, LOW);
+  digitalWrite(15, LOW);
 }
 
 void loop() {
