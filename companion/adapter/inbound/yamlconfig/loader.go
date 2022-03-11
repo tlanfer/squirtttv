@@ -37,6 +37,14 @@ func (l *loader) Load() (*companion.Config, error) {
 		return nil, errors.New("need either a twitch channel or a streamlabs token. see config.example.yaml for an example")
 	}
 
+	if c.Duration < 500*time.Millisecond {
+		return nil, errors.New("spray time must be at least 500ms")
+	}
+
+	if len(c.Events) == 0 {
+		return nil, errors.New("must give at least one event to trigger on")
+	}
+
 	return c, nil
 }
 
