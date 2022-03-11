@@ -18,6 +18,8 @@ const (
 )
 
 func main() {
+	time.Sleep(100 * time.Millisecond)
+	log.Println("Squirtianna companion starting...")
 
 	loader := yamlconfig.New(filename, example)
 	conf, err := loader.Load()
@@ -30,6 +32,7 @@ func main() {
 			os.Exit(1)
 		}
 	}
+	log.Printf("Config loaded:\n%v", dump(*conf))
 
 	events := make(chan companion.StreamEvent)
 
