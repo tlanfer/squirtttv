@@ -61,7 +61,7 @@ func (l *loader) Example() {
 		Squirters: []string{
 			"192.168.1.200",
 		},
-		Twitch:     "arianna",
+		Twitch:     "tlanfer",
 		Streamlabs: "eyJ0eX.... get yours from https://streamlabs.com/dashboard#/settings/api-settings > API Tokens > Your Socket API Token",
 		Events: []companion.Event{
 			{Type: companion.EventTypeBits, Min: 0, Max: 100},
