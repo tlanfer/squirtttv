@@ -79,15 +79,9 @@ void setup() {
 }
 
 void squirt(int t) {
-  digitalWrite(12, HIGH);
-  digitalWrite(13, HIGH);
-  digitalWrite(14, HIGH);
-  digitalWrite(15, HIGH);
+  digitalWrite(PUMP_PIN, HIGH);
   delay(t);
-  digitalWrite(12, LOW);
-  digitalWrite(13, LOW);
-  digitalWrite(14, LOW);
-  digitalWrite(15, LOW);
+  digitalWrite(PUMP_PIN, LOW);
 }
 
 void loop() {
