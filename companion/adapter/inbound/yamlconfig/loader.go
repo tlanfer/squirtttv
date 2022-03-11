@@ -56,8 +56,11 @@ func (l *loader) Example() {
 	defer file.Close()
 
 	c := &companion.Config{
-		Cooldown:   5 * time.Second,
-		Duration:   1 * time.Second,
+		Cooldown: 5 * time.Second,
+		Duration: 1 * time.Second,
+		Squirters: []string{
+			"192.168.1.200",
+		},
 		Twitch:     "arianna",
 		Streamlabs: "eyJ0eX.... get yours from https://streamlabs.com/dashboard#/settings/api-settings > API Tokens > Your Socket API Token",
 		Events: []companion.Event{
