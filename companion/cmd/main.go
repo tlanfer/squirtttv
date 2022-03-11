@@ -48,18 +48,21 @@ func main() {
 
 	if len(conf.Squirters) > 0 {
 		for _, s := range conf.Squirters {
-			log.Printf("Use squirter at %v", s)
 			squirters = append(squirters, squirter.New(s))
 		}
 	} else {
 		squirters = squirter.Find()
 	}
 
+	for _, s := range squirters {
+		log.Printf("Use %v", s)
+	}
+
 	timeout := time.Now()
 
 	for event := range events {
 		if time.Now().After(timeout) && conf.Matches(event) {
-			timeout = time.Now().Add(conf.Cooldown)
+			timeout = time.Now().Add(conf.Cooldown + conf.Duration)
 			log.Printf("Got some %v (%v) -> Squirt for %v", event.EventType, event.Amount, conf.Duration)
 			squirters.Squirt(conf.Duration)
 		} else {

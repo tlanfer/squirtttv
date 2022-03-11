@@ -32,14 +32,14 @@ func (s *streamlabs) Connect(events chan<- companion.StreamEvent) error {
 	}
 
 	err = client.On(gosocketio.OnConnection, func(c *gosocketio.Channel) {
-		log.Printf("StreamlabsConfig connected")
+		log.Printf("Streamlabs connected")
 	})
 	if err != nil {
 		return fmt.Errorf("failed to subscribe to connects: %w", err)
 	}
 
 	err = client.On(gosocketio.OnDisconnection, func(c *gosocketio.Channel) {
-		log.Printf("StreamlabsConfig disconnected")
+		log.Printf("Streamlabs disconnected")
 	})
 	if err != nil {
 		return fmt.Errorf("failed to subscribe to disconnects: %w", err)

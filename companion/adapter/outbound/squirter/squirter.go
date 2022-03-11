@@ -3,7 +3,6 @@ package squirter
 import (
 	"fmt"
 	"github.com/hashicorp/mdns"
-	"log"
 	"net/http"
 	"time"
 )
@@ -28,7 +27,6 @@ func Find() Squirters {
 	go func() {
 		for entry := range entriesCh {
 			h := entry.AddrV4.String()
-			log.Println("Found", h)
 			squirters = append(squirters, &squirter{
 				host: h,
 			})
@@ -49,6 +47,10 @@ func New(host string) Squirter {
 
 type squirter struct {
 	host string
+}
+
+func (s *squirter) String() string {
+	return fmt.Sprintf("squirter [%v]", s.host)
 }
 
 func (s *squirter) Squirt(duration time.Duration) {
