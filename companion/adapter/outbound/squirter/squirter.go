@@ -12,7 +12,7 @@ type Squirters []Squirter
 
 func (s *Squirters) Squirt(duration time.Duration) {
 	for _, sq := range *s {
-		sq.Squirt(duration)
+		go sq.Squirt(duration)
 	}
 }
 
@@ -41,6 +41,10 @@ func Find() Squirters {
 	close(entriesCh)
 
 	return squirters
+}
+
+func New(host string) Squirter {
+	return &squirter{host: host}
 }
 
 type squirter struct {

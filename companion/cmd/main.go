@@ -44,7 +44,16 @@ func main() {
 		tc.Connect(events)
 	}
 
-	squirters := squirter.Find()
+	var squirters squirter.Squirters
+
+	if len(conf.Squirters) > 0 {
+		for _, s := range conf.Squirters {
+			log.Printf("Use squirter at %v", s)
+			squirters = append(squirters, squirter.New(s))
+		}
+	} else {
+		squirters = squirter.Find()
+	}
 
 	timeout := time.Now()
 

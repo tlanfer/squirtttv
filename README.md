@@ -50,6 +50,8 @@ You can go to `http://<your-sprayers-ip>/` to send test sprays to experiment wit
 ```yaml
 cooldown: 5s
 duration: 1s
+squirters:
+  - 192.168.1.200
 twitch: arianna
 streamlabs: eyJ0eX....
 events:
@@ -72,6 +74,7 @@ events:
 |-------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | cooldown    | Ignore events after a spray happened                                                                                                                                                                                                                                       |
 | duration    | How long to activate the sprayer. Around 500ms-1s seems to be alright.                                                                                                                                                                                                     |
+| squirters   | (optional) List of hosts where squirters are running. If none are given, the companion app will try to auto detect squirters on your network                                                                                                                               | 
 | twitch      | Watch this channel for cheers or subs. You can leave this empty if you dont want twitch integration. You need at least one of twitch/streamlabs.                                                                                                                           |
 | streamlabs  | Connect to streamlabs for donations. You can leave this empty if you dont want to react to donations. Get your *Socket API Token* on [streamlabs > API Tokens](https://streamlabs.com/dashboard#/settings/api-settings). <br/> You need at least one of twitch/streamlabs. |
 | events      | A list of events that can trigger the sprayer. If at least one matches, the sprayer activates.                                                                                                                                                                             |
@@ -79,4 +82,3 @@ events:
 | events.min  | Minimum amount for this event. Defaults to 0 if left out.                                                                                                                                                                                                                  |
 | events.max  | Maximum amount for this event. Can be left out, defaults to infinity.                                                                                                                                                                                                      |
 
-It should detect the sprayer on your network and connect to twich/streamlabs.
