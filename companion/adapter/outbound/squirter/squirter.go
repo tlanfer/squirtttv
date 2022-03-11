@@ -3,6 +3,7 @@ package squirter
 import (
 	"fmt"
 	"github.com/hashicorp/mdns"
+	"log"
 	"net/http"
 	"time"
 )
@@ -55,5 +56,8 @@ func (s *squirter) String() string {
 
 func (s *squirter) Squirt(duration time.Duration) {
 	http.DefaultClient.Timeout = 1 * time.Second
-	http.Get(fmt.Sprintf("http://%v/squirt?duration=%v", s.host, duration.Milliseconds()))
+	_, err := http.Get(fmt.Sprintf("http://%v/squirt?duration=%v", s.host, duration.Milliseconds()))
+	if err != nil {
+		log.Printf("Failed to send event to %v", s)
+	}
 }
