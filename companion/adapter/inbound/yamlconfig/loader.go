@@ -70,6 +70,12 @@ func (l *loader) Example() {
 			{Type: companion.EventTypeDono, Min: 100},
 			{Type: companion.EventTypeSub, Min: 10},
 		},
+		ChatTriggers: []companion.ChatTrigger{
+			{
+				Role:    companion.ChatRoleMod,
+				Message: "!squirt",
+			},
+		},
 	}
 	yaml.NewEncoder(file).Encode(c)
 }

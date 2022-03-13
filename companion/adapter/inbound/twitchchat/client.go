@@ -71,12 +71,28 @@ type twitchChat struct {
 	channel string
 }
 
-func (t *twitchChat) Connect(events chan<- companion.StreamEvent) error {
+func (t *twitchChat) Connect(events chan<- companion.StreamEvent, messages chan<- companion.ChatMessage) error {
 	t.client.OnPrivateMessage(func(message twitch.PrivateMessage) {
 		if message.Bits > 0 {
 			events <- companion.StreamEvent{
 				EventType: companion.EventTypeBits,
 				Amount:    message.Bits,
+			}
+		} else {
+			role := companion.ChatRolePleb
+			if _, exists := message.User.Badges["subscriber"]; exists {
+				role = companion.ChatRoleSub
+			}
+			if _, exists := message.User.Badges["moderator"]; exists {
+				role = companion.ChatRoleMod
+			}
+			if _, exists := message.User.Badges["broadcaster"]; exists {
+				role = companion.ChatRoleMod
+			}
+			messages <- companion.ChatMessage{
+				User:    message.User.Name,
+				Role:    role,
+				Message: message.Message,
 			}
 		}
 	})

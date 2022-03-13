@@ -36,16 +36,17 @@ func main() {
 	conf.Dump(os.Stdout)
 
 	events := make(chan companion.StreamEvent)
+	messages := make(chan companion.ChatMessage)
 
 	if conf.Streamlabs != "" {
 		sl := streamlabs.New(conf.Streamlabs)
-		sl.Connect(events)
+		sl.Connect(events, messages)
 	}
 
 	if conf.Twitch != "" {
 		//tc := twitchchat.New(conf.Twitch, twitchchat.WithFdgt(), twitchchat.WithFaker(3270*time.Millisecond))
 		tc := twitchchat.New(conf.Twitch)
-		tc.Connect(events)
+		tc.Connect(events, messages)
 	}
 
 	var squirters squirter.Squirters
@@ -64,13 +65,20 @@ func main() {
 
 	timeout := time.Now()
 
-	for event := range events {
-		if time.Now().After(timeout) && conf.Matches(event) {
-			timeout = time.Now().Add(conf.Cooldown + conf.Duration)
-			log.Printf("Got some %v (%v) -> Squirt for %v", event.EventType, event.Amount, conf.Duration)
-			squirters.Squirt(conf.Duration)
-		} else {
-			log.Printf("Ignore %v (%v)", event.EventType, event.Amount)
+	for {
+		select {
+		case m := <-messages:
+			if conf.HasChatTrigger(m) && time.Now().After(timeout) {
+				log.Printf("Message from %v: %v -> Squirt for %v", m.User, m.Message, conf.Duration)
+				squirters.Squirt(conf.Duration)
+				timeout = time.Now().Add(conf.Cooldown + conf.Duration)
+			}
+		case e := <-events:
+			if conf.HasEvent(e) && time.Now().After(timeout) {
+				log.Printf("%v of %v: Squirt for %v", e.EventType, e.Amount, conf.Duration)
+				squirters.Squirt(conf.Duration)
+				timeout = time.Now().Add(conf.Cooldown + conf.Duration)
+			}
 		}
 	}
 

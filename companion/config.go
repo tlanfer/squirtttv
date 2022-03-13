@@ -3,6 +3,7 @@ package companion
 import (
 	"gopkg.in/yaml.v3"
 	"io"
+	"strings"
 	"time"
 )
 
@@ -27,7 +28,8 @@ type Config struct {
 
 	Squirters []string `yaml:"squirters"`
 
-	Events []Event `yaml:"events"`
+	Events       []Event       `yaml:"events"`
+	ChatTriggers []ChatTrigger `yaml:"chat"`
 }
 
 type Event struct {
@@ -36,7 +38,13 @@ type Event struct {
 	Max  int       `yaml:"max,omitempty"`
 }
 
-func (c Config) Matches(ev StreamEvent) bool {
+type ChatTrigger struct {
+	Role    ChatRole `yaml:"role"`
+	User    string   `yaml:"user,omitempty"`
+	Message string   `yaml:"message"`
+}
+
+func (c Config) HasEvent(ev StreamEvent) bool {
 	for _, e := range c.Events {
 
 		if ev.EventType != e.Type {
@@ -48,6 +56,27 @@ func (c Config) Matches(ev StreamEvent) bool {
 		}
 
 		if e.Max > 0 && ev.Amount > e.Max {
+			continue
+		}
+
+		return true
+	}
+
+	return false
+}
+
+func (c Config) HasChatTrigger(message ChatMessage) bool {
+	for _, e := range c.ChatTriggers {
+
+		if message.Role < e.Role {
+			continue
+		}
+
+		if !strings.Contains(message.Message, e.Message) {
+			continue
+		}
+
+		if e.User != "" && message.User != e.User {
 			continue
 		}
 

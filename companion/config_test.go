@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func TestConfig_Matches(t *testing.T) {
+func TestConfig_HasEvent(t *testing.T) {
 
 	c := Config{Events: []Event{
 		{
@@ -42,8 +42,60 @@ func TestConfig_Matches(t *testing.T) {
 	}
 	for i, tt := range tests {
 		t.Run(fmt.Sprint(i), func(t *testing.T) {
-			if got := c.Matches(tt.ev); got != tt.want {
-				t.Errorf("Matches() = %v, want %v", got, tt.want)
+			if got := c.HasEvent(tt.ev); got != tt.want {
+				t.Errorf("HasEvent() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestConfig_HasChatTrigger(t *testing.T) {
+	c := Config{ChatTriggers: []ChatTrigger{
+		{
+			Role:    ChatRoleMod,
+			Message: "modsquirt",
+		},
+		{
+			Role:    ChatRoleSub,
+			Message: "subsquirt",
+		},
+		{
+			Role:    ChatRolePleb,
+			Message: "plebsquirt",
+		},
+		{
+			User:    "Steven",
+			Message: "stevensquirt",
+		},
+		{
+			User:    "Tom",
+			Role:    ChatRoleSub,
+			Message: "tomsquirt",
+		},
+	}}
+
+	tests := []struct {
+		message ChatMessage
+		want    bool
+	}{
+		{ChatMessage{"Steven", ChatRoleMod, "do a modsquirt"}, true},
+		{ChatMessage{"Steven", ChatRoleSub, "do a vipsquirt"}, false},
+		{ChatMessage{"Steven", ChatRoleSub, "do a subsquirt"}, true},
+		{ChatMessage{"Steven", ChatRolePleb, "do a subsquirt"}, false},
+		{ChatMessage{"Steven", ChatRolePleb, "do a plebsquirt"}, true},
+		{ChatMessage{"Steven", ChatRolePleb, "do a stevensquirt"}, true},
+		{ChatMessage{"Peter", ChatRolePleb, "do a stevensquirt"}, false},
+		{ChatMessage{"Tom", ChatRoleMod, "do a tomsquirt"}, true},
+		{ChatMessage{"Tom", ChatRoleSub, "do a tomsquirt"}, true},
+		{ChatMessage{"Tom", ChatRolePleb, "do a tomsquirt"}, false},
+		{ChatMessage{"Karl", ChatRoleSub, "do a tomsquirt"}, false},
+		{ChatMessage{"Karl", ChatRoleMod, "do a tomsquirt"}, false},
+	}
+
+	for i, tt := range tests {
+		t.Run(fmt.Sprint(i), func(t *testing.T) {
+			if got := c.HasChatTrigger(tt.message); got != tt.want {
+				t.Errorf("HasChatTrigger() = %v, want %v\n%v", got, tt.want, tt.message)
 			}
 		})
 	}

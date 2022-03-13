@@ -19,7 +19,7 @@ type streamlabs struct {
 	token string
 }
 
-func (s *streamlabs) Connect(events chan<- companion.StreamEvent) error {
+func (s *streamlabs) Connect(events chan<- companion.StreamEvent, messages chan<- companion.ChatMessage) error {
 	websocketTransport := transport.DefaultWebsocketTransport()
 	websocketTransport.PingInterval = 20 * time.Second
 
