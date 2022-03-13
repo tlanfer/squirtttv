@@ -8,6 +8,8 @@ import (
 	"time"
 )
 
+const servicename = "squirtttv"
+
 type Squirters []Squirter
 
 func (s *Squirters) Squirt(duration time.Duration) {
@@ -33,7 +35,7 @@ func Find() Squirters {
 			})
 		}
 	}()
-	params := mdns.DefaultParams("_squirtianna._tcp")
+	params := mdns.DefaultParams(fmt.Sprintf("_%v._tcp", servicename))
 	params.Entries = entriesCh
 	params.DisableIPv6 = true
 	_ = mdns.Query(params)

@@ -5,7 +5,7 @@
 #include <ESPAsyncWiFiManager.h>
 #include "form.h"
 
-#define HOSTNAME "squirtianna"
+#define HOSTNAME "squirtttv"
 #define PUMP_PIN 12
 
 AsyncWebServer server(80);
