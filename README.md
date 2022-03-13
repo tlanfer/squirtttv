@@ -1,4 +1,4 @@
-# Squirtianna
+# SquirtTTV
 
 This lets you squirt someone with water when something happens on twitch.
 
@@ -56,7 +56,7 @@ cooldown: 5s
 duration: 1s
 squirters:
   - 192.168.1.200
-twitch: arianna
+twitch: tlanfer
 streamlabs: eyJ0eX....
 events:
   - type: bits
