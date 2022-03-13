@@ -32,7 +32,8 @@ func main() {
 			os.Exit(1)
 		}
 	}
-	log.Printf("Config loaded:\n%v", dump(*conf))
+	log.Println("Config loaded:")
+	conf.Dump(os.Stdout)
 
 	events := make(chan companion.StreamEvent)
 

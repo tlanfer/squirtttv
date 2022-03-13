@@ -1,6 +1,10 @@
 package companion
 
-import "time"
+import (
+	"gopkg.in/yaml.v3"
+	"io"
+	"time"
+)
 
 type ConfigError string
 
@@ -51,4 +55,14 @@ func (c Config) Matches(ev StreamEvent) bool {
 	}
 
 	return false
+}
+
+func (c Config) Dump(o io.Writer) {
+	if c.Streamlabs != "" {
+		c.Streamlabs = "REDACTED"
+	}
+	encoder := yaml.NewEncoder(o)
+	encoder.SetIndent(2)
+	encoder.Encode(c)
+	return
 }
