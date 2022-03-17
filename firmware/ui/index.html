@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Squirtttv</title>
+    <style>
+        @font-face {
+            font-family: "Amatic SC";
+            src: url("AmaticSC-Regular.ttf");
+        }
+        @font-face {
+            font-family: "Amatic SC";
+            src: url("AmaticSC-Bold.ttf");
+            font-weight: bold;
+        }
+
+        html {
+            background-color: hsl(210, 6%, 13%);
+            color: #ddd;
+            font-family: 'Amatic SC', cursive;
+            font-size: 20pt;
+            height: 100%;
+        }
+
+        body{
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            margin: 0;
+        }
+        main {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1 1 auto;
+        }
+
+        section {
+            width: 350px;
+            padding: 0.5em 1em;
+            margin: .5em;
+            border-radius: 10px;
+
+            background-color: hsl(210, 6%, 11%);
+        }
+
+        section form {
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            text-align: center;
+        }
+
+        section form * {
+            margin: 10px 0;
+        }
+
+        section h1 {
+            margin: 0;
+        }
+
+        button {
+            border: none;
+            border-radius: 5px;
+            padding: 5px;
+
+            font-family: 'Amatic SC', cursive;
+            font-size: 20pt;
+            color: white;
+            background-image: linear-gradient(169deg, hsl(216deg, 100%, 30%), #35698f);
+            box-shadow: 0 0 15px hsl(0deg 0% 0% / 20%);
+        }
+
+        @keyframes slideIt {
+            from {
+                background-position: 100%;
+            }
+            to {
+                background-position: 0%;
+            }
+        }
+
+        button[disabled] {
+            background-image: linear-gradient(169deg, hsl(216deg, 30%, 30%), hsl(205deg, 16%, 38%));
+            color: #777;
+        }
+        
+        button.hold {
+            background-image:
+                    linear-gradient(to right, #de7c6d 0%, tomato 50%, transparent 50%),
+                    linear-gradient(169deg, hsl(216deg, 100%, 30%), #35698f);
+
+            background-size: 200%, 100%;
+            background-position: 0%;
+
+            animation: slideIt linear;
+        }
+
+        strong {
+            color: tomato;
+        }
+
+        a, a:visited {
+            color: inherit;
+            border-bottom: 1px solid white;
+            text-decoration: none;
+        }
+
+        a:active, a:hover {
+            border-bottom: 1px solid tomato;
+        }
+
+        footer {
+            text-align: center;
+            font-size: 14pt;
+            height: 2em;
+        }
+    </style>
+</head>
+<body>
+<main>
+    <h1>Squirtttv 💦</h1>
+    <section id="squirt-testing">
+        <h1>💦 Testing</h1>
+        <div>
+            You can use this to do some test squirts for setting up the proper duration.
+        </div>
+        <form action="squirt" onsubmit="return false">
+            <label for="squirt_duration">1000ms</label>
+            <input type="range" value="1000" min="500" max="5000" name="duration" id="squirt_duration">
+            <button>Squirt!</button>
+        </form>
+    </section>
+    <section id="firmware-update">
+        <h1>💾 Firmware update</h1>
+        <p>
+            Do <strong>not</strong> upload anything thats not a squirtttv firmware, it will brick the device!
+        </p>
+        <p>
+            Go <a href="/update">here</a> to update the firmware.
+        </p>
+    </section>
+</main>
+<footer>
+    Check <a href="https://github.com/tlanfer/squirtttv" target="_blank">github.com/tlanfer/squirtttv</a> for updates.</a>
+</footer>
+<script>
+    const st = document.querySelector("#squirt-testing");
+    const btn = st.querySelector("button");
+    const lbl = st.querySelector("label");
+    const inp = st.querySelector("input");
+    inp.oninput = () => { lbl.innerText = inp.value + 'ms' }
+    lbl.innerText = inp.value + 'ms';
+    btn.onclick = () => {
+        btn.disabled = true;
+        btn.classList.add("hold");
+        btn.style.animationDuration = inp.value+"ms";
+        fetch("/squirt?duration="+inp.value);
+        setTimeout(()=>{
+            btn.disabled=false;
+            btn.classList.remove("hold");
+        }, parseInt(inp.value));
+    }
+</script>
+</body>
+</html>

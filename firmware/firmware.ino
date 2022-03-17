@@ -1,11 +1,19 @@
+#include <FS.h>
 #include <ESP8266WiFi.h>
 #include <ESP8266mDNS.h>
 #include <ESPAsyncTCP.h>
 #include <ESPAsyncWebServer.h>
 #include <ESPAsyncWiFiManager.h>
-#include "form.h"
+#include <SPIFFSEditor.h>
+#include <AsyncElegantOTA.h>
+#include <Hash.h>
+#include <elegantWebpage.h>
 
 #define HOSTNAME "squirtttv"
+
+#define ADMIN_USERNAME "admin"
+#define ADMIN_PASSWORD "admin"
+
 #define PUMP_PIN 12
 
 AsyncWebServer server(80);
@@ -26,23 +34,15 @@ void setupSerial(){
 void setupWifi(){
   AsyncWiFiManager wifiManager(&server,&dns);
   wifiManager.autoConnect(HOSTNAME);
-
-  // WiFi.mode(WIFI_STA);
-  // WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
-  // if (WiFi.waitForConnectResult() != WL_CONNECTED) {
-  //     Serial.printf("WiFi Failed!\n");
-  //     return;
-  // }
   
   Serial.print("Wifi ready: ");
   Serial.println(WiFi.localIP());
 }
 
 void setupWebserver(){
-
-  server.on("/", HTTP_GET, [] (AsyncWebServerRequest *request) {
-    request->send(200, "text/html", indexhtml);
-  });
+  SPIFFS.begin();
+  server.serveStatic("/", SPIFFS, "/").setDefaultFile("index.html");
+  server.addHandler(new SPIFFSEditor(ADMIN_USERNAME,ADMIN_PASSWORD));
 
   server.on("/squirt", HTTP_GET, [] (AsyncWebServerRequest *request) {
     if (request->hasParam("duration")) {
@@ -51,6 +51,8 @@ void setupWebserver(){
     }
     request->redirect("/");
   });
+
+  AsyncElegantOTA.begin(&server);    // Start ElegantOTA
 
   server.onNotFound([](AsyncWebServerRequest *request){
     request->redirect("https://github.com/tlanfer/squirtianna");
