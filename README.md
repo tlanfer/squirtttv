@@ -12,21 +12,25 @@ This lets you squirt someone with water when something happens on twitch.
 
 1. Wire up an ESP8266 so that pin D6 triggers the water pistol
 
-* Start with a "Gloria AutoPump Mini" electronic water sprayer
-* Remove the original micro switch from the trigger
-* Replace the micro switch with a mosfet, or some other way for GPIO 12 to trigger the pump.
-* A neat solution is using a Wemos D1 mini and a mosfet shield for it
+   * Start with a "Gloria AutoPump Mini" electronic water sprayer
+   * Remove the original micro switch from the trigger
+   * Replace the micro switch with a mosfet, or some other way for GPIO 12 to trigger the pump.
+   * A neat solution is using a Wemos D1 mini and a mosfet shield for it
 
 2. Install the firmware on it using Arduino
+3. On the first start, the device will open up a wifi access point
+4. Use your phone to connect to the wifi AP, then give the device your home wifi credentials.After you save, it should reboot and be available on your network
+5. Go to `http://<device-ip>/edit` to upload the web ui from the `firmware/ui/` folder
 
 I'm sure this will work with other electric sprayers as well, but i only tested it with the Gloria AutoPump Mini.
 
 ## Preparing the hardware
 
-* Plug the USB device into power
-* On the first start, the device will open up a wifi access point
-* Use your phone to connect to the wifi AP, then give the device your home wifi credentials
-* After you save, it should reboot and be available on your network 
+1. Plug the USB device into power
+2. If you just built the device and followed the previous section, you can skip the following steps
+3. On the first start, the device will open up a wifi access point
+5. Use your phone to connect to the wifi AP, then give the device your home wifi credentials
+6. After you save, it should reboot and be available on your network 
 
 ## Preparing the companion
 
