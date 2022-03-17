@@ -76,7 +76,7 @@
                 background-position: 100%;
             }
             to {
-                background-position: 0%;
+                background-position: 0;
             }
         }
 
@@ -91,7 +91,7 @@
                     linear-gradient(169deg, hsl(216deg, 100%, 30%), #35698f);
 
             background-size: 200%, 100%;
-            background-position: 0%;
+            background-position: 0;
 
             animation: slideIt linear;
         }
@@ -110,6 +110,12 @@
             border-bottom: 1px solid tomato;
         }
 
+        #firmware-update span {
+            width: 50px;
+            display: inline-block;
+            text-align: center;
+        }
+
         footer {
             text-align: center;
             font-size: 14pt;
@@ -119,30 +125,31 @@
 </head>
 <body>
 <main>
-    <h1>Squirtttv 💦</h1>
+    <h1>💦 Squirtttv 💦</h1>
     <section id="squirt-testing">
-        <h1>💦 Testing</h1>
+        <h1>🧪 Testing</h1>
         <div>
             You can use this to do some test squirts for setting up the proper duration.
         </div>
-        <form action="squirt" onsubmit="return false">
+        <form onsubmit="return false">
             <label for="squirt_duration">1000ms</label>
             <input type="range" value="1000" min="500" max="5000" name="duration" id="squirt_duration">
             <button>Squirt!</button>
         </form>
     </section>
     <section id="firmware-update">
-        <h1>💾 Firmware update</h1>
+        <h1>⚡ Danger zone</h1>
         <p>
-            Do <strong>not</strong> upload anything thats not a squirtttv firmware, it will brick the device!
+            Here you can update the software.
         </p>
         <p>
-            Go <a href="/update">here</a> to update the firmware.
+            <span>💾</span> <a href="/update">Firmware update</a><br>
+            <span>🖼</span> <a href="/update">Change web ui</a>
         </p>
     </section>
 </main>
 <footer>
-    Check <a href="https://github.com/tlanfer/squirtttv" target="_blank">github.com/tlanfer/squirtttv</a> for updates.</a>
+    Check <a href="https://github.com/tlanfer/squirtttv" target="_blank">github.com/tlanfer/squirtttv</a> for updates.
 </footer>
 <script>
     const st = document.querySelector("#squirt-testing");
