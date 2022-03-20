@@ -3,3 +3,4 @@ config.yaml
 config.example.yaml
 firmware/build/
 firmware/tutorial/
+companion.log

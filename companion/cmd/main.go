@@ -18,10 +18,16 @@ const (
 )
 
 func main() {
-	time.Sleep(100 * time.Millisecond)
-	log.Println("Squirtianna companion starting...")
-
 	ui := trayicon.New()
+
+	err := setupLogging()
+	if err != nil {
+		ui.ErrorMessage("%v", err.Error())
+		return
+	}
+
+	time.Sleep(100 * time.Millisecond)
+	log.Println("Companion starting...")
 
 	loader := yamlconfig.New(filename, example)
 	conf, err := loader.Load()
@@ -101,4 +107,16 @@ func main() {
 		}
 	}
 
+}
+
+func setupLogging() error {
+
+	file, err := os.OpenFile("companion.log", os.O_CREATE|os.O_RDWR|os.O_APPEND, os.ModePerm)
+	if err != nil {
+		return err
+	}
+
+	log.SetOutput(file)
+
+	return nil
 }

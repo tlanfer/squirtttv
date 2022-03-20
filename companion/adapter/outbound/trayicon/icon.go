@@ -43,7 +43,7 @@ func (u *ui) OnQuit() <-chan any {
 }
 
 func (u *ui) ErrorMessage(fmt string, parts ...any) {
-	dialog.Message(fmt, parts...).Info()
+	dialog.Message(fmt, parts...).Error()
 }
 
 func (u *ui) SetTwitchConnected(b bool) {

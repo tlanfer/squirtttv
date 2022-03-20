@@ -1,5 +1,7 @@
 # SquirtTTV
 
+[![pre-release](https://github.com/tlanfer/squirtttv/actions/workflows/pre-release.yaml/badge.svg)](https://github.com/tlanfer/squirtttv/actions/workflows/pre-release.yaml)
+
 This lets you squirt someone with water when something happens on twitch.
 
 * [Building the hardware](#building-the-hardware)
