@@ -34,11 +34,11 @@ func main() {
 	if err != nil {
 		if err == companion.ErrConfigNotFound {
 			ui.ErrorMessage("No %v found, please create one. You can use %v as an example.", filename, example)
-			//fmt.Printf("No %v found, please create one. You can use %v as an example.", filename, example)
+			ui.Quit()
 			os.Exit(1)
 		} else {
 			ui.ErrorMessage("Failed to load config: %s", err.Error())
-			//fmt.Println("Failed to load config:", err.Error())
+			ui.Quit()
 			os.Exit(1)
 		}
 	}
@@ -103,6 +103,7 @@ func main() {
 			}
 		case <-ui.OnQuit():
 			log.Println("Quitting!")
+			ui.Quit()
 			return
 		}
 	}

@@ -85,9 +85,12 @@ func (u *ui) onReady() {
 	menuItem := systray.AddMenuItem("Quit", "Quit the companion")
 
 	<-menuItem.ClickedCh
-	systray.Quit()
+	u.quitChan <- "quit"
 }
 
-func (u *ui) onExit() {
-	u.quitChan <- "quit"
+func (u *ui) onExit() {}
+
+func (u *ui) Quit() {
+	systray.Quit()
+	time.Sleep(100 * time.Millisecond)
 }

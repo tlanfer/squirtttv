@@ -11,4 +11,5 @@ type Ui interface {
 	SetActive(t time.Duration)
 
 	OnQuit() <-chan any
+	Quit()
 }
