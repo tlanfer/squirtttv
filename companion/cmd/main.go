@@ -6,7 +6,7 @@ import (
 	"companion/adapter/inbound/twitchchat"
 	"companion/adapter/inbound/yamlconfig"
 	"companion/adapter/outbound/squirter"
-	"fmt"
+	"companion/adapter/outbound/trayicon"
 	"log"
 	"os"
 	"time"
@@ -21,32 +21,46 @@ func main() {
 	time.Sleep(100 * time.Millisecond)
 	log.Println("Squirtianna companion starting...")
 
+	ui := trayicon.New()
+
 	loader := yamlconfig.New(filename, example)
 	conf, err := loader.Load()
 	if err != nil {
 		if err == companion.ErrConfigNotFound {
-			fmt.Printf("No %v found, please create one. You can use %v as an example.", filename, example)
+			ui.ErrorMessage("No %v found, please create one. You can use %v as an example.", filename, example)
+			//fmt.Printf("No %v found, please create one. You can use %v as an example.", filename, example)
 			os.Exit(1)
 		} else {
-			fmt.Println("Failed to load config:", err.Error())
+			ui.ErrorMessage("Failed to load config: %s", err.Error())
+			//fmt.Println("Failed to load config:", err.Error())
 			os.Exit(1)
 		}
 	}
-	log.Println("Config loaded:")
-	conf.Dump(os.Stdout)
 
 	events := make(chan companion.StreamEvent)
 	messages := make(chan companion.ChatMessage)
 
 	if conf.Streamlabs != "" {
 		sl := streamlabs.New(conf.Streamlabs)
-		sl.Connect(events, messages)
+		err := sl.Connect(events, messages)
+
+		if err != nil {
+			ui.ErrorMessage("Failed to connect to streamlabs: %s", err.Error())
+		} else {
+			ui.SetStreamlabsConnected(true)
+		}
 	}
 
 	if conf.Twitch != "" {
 		//tc := twitchchat.New(conf.Twitch, twitchchat.WithFdgt(), twitchchat.WithFaker(3270*time.Millisecond))
 		tc := twitchchat.New(conf.Twitch)
-		tc.Connect(events, messages)
+		err := tc.Connect(events, messages)
+
+		if err != nil {
+			ui.ErrorMessage("Failed to connect to twitch: %s", err.Error())
+		} else {
+			ui.SetTwitchConnected(true)
+		}
 	}
 
 	var squirters squirter.Squirters
@@ -70,15 +84,20 @@ func main() {
 		case m := <-messages:
 			if conf.HasChatTrigger(m) && time.Now().After(timeout) {
 				log.Printf("Message from %v: %v -> Squirt for %v", m.User, m.Message, conf.Duration)
+				ui.SetActive(conf.Duration)
 				squirters.Squirt(conf.Duration)
 				timeout = time.Now().Add(conf.Cooldown + conf.Duration)
 			}
 		case e := <-events:
 			if conf.HasEvent(e) && time.Now().After(timeout) {
 				log.Printf("%v of %v: Squirt for %v", e.EventType, e.Amount, conf.Duration)
+				ui.SetActive(conf.Duration)
 				squirters.Squirt(conf.Duration)
 				timeout = time.Now().Add(conf.Cooldown + conf.Duration)
 			}
+		case <-ui.OnQuit():
+			log.Println("Quitting!")
+			return
 		}
 	}
 

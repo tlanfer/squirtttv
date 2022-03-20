@@ -25,7 +25,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-go-
       - name: Build
-        run: cd companion && go build -o ../companion.exe ./cmd
+        run: cd companion && go build -ldflags -H=windowsgui -o ../companion.exe ./cmd
       - uses: "marvinpinto/action-automatic-releases@latest"
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
