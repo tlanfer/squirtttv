@@ -1,6 +1,6 @@
 # SquirtTTV
 
-[![pre-release](https://github.com/tlanfer/squirtttv/actions/workflows/pre-release.yaml/badge.svg)](https://github.com/tlanfer/squirtttv/actions/workflows/pre-release.yaml)
+[![GitHub release](https://img.shields.io/github/release/tlanfer/squirtttv?include_prereleases=&sort=semver&color=blue)](https://github.com/tlanfer/squirtttv/releases)
 
 This lets you squirt someone with water when something happens on twitch.
 
