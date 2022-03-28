@@ -7,19 +7,22 @@ import (
 	"github.com/ambelovsky/gosf-socketio/transport"
 	"log"
 	"strconv"
+	"strings"
 	"time"
 )
 
-func New(token, currency string) companion.StreamEventSource {
+func New(token, currency string, converter companion.CurrencyConverter) companion.StreamEventSource {
 	return &streamlabs{
-		token:    token,
-		currency: currency,
+		token:     token,
+		currency:  currency,
+		converter: converter,
 	}
 }
 
 type streamlabs struct {
-	token    string
-	currency string
+	token     string
+	currency  string
+	converter companion.CurrencyConverter
 }
 
 type Channel struct {
@@ -59,9 +62,14 @@ func (s *streamlabs) Connect(events chan<- companion.StreamEvent, messages chan<
 	}
 
 	err = client.On("event", func(c *gosocketio.Channel, data Ev) {
-		if data.Type == "donation" && data.Message[0].Currency == s.currency {
+		if data.Type == "donation" {
 			amount := parseAmount(data.Message[0].Amount) * 100
-			log.Println("Amount:", amount)
+			sourceCurrency := strings.ToLower(data.Message[0].Currency)
+			if sourceCurrency != s.currency {
+				converted := s.converter.Convert(int(amount), sourceCurrency, s.currency)
+				log.Printf("Converted %v %v to %v %v", amount, sourceCurrency, converted, s.currency)
+				amount = converted
+			}
 			events <- companion.StreamEvent{
 				EventType: companion.EventTypeDono,
 				Amount:    amount,

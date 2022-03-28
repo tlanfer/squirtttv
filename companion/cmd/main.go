@@ -5,6 +5,7 @@ import (
 	"companion/adapter/inbound/streamlabs"
 	"companion/adapter/inbound/twitchchat"
 	"companion/adapter/inbound/yamlconfig"
+	"companion/adapter/outbound/exchangerate"
 	"companion/adapter/outbound/squirter"
 	"companion/adapter/outbound/trayicon"
 	"log"
@@ -43,11 +44,18 @@ func main() {
 		}
 	}
 
+	converter, err := exchangerate.New(conf.Currency)
+	if err != nil {
+		ui.ErrorMessage("Currency %v can not be converted to.", conf.Currency)
+		ui.Quit()
+		os.Exit(1)
+	}
+
 	events := make(chan companion.StreamEvent)
 	messages := make(chan companion.ChatMessage)
 
 	if conf.Streamlabs != "" {
-		sl := streamlabs.New(conf.Streamlabs, conf.Currency)
+		sl := streamlabs.New(conf.Streamlabs, conf.Currency, converter)
 		err := sl.Connect(events, messages)
 
 		if err != nil {

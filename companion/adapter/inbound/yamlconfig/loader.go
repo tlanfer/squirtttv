@@ -5,6 +5,7 @@ import (
 	"errors"
 	"gopkg.in/yaml.v3"
 	"os"
+	"strings"
 	"time"
 )
 
@@ -48,6 +49,7 @@ func (l *loader) Load() (*companion.Config, error) {
 	if c.Currency == "" {
 		c.Currency = "EUR"
 	}
+	c.Currency = strings.ToLower(c.Currency)
 
 	return c, nil
 }
