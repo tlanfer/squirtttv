@@ -63,13 +63,14 @@ func (s *streamlabs) Connect(events chan<- companion.StreamEvent, messages chan<
 
 	err = client.On("event", func(c *gosocketio.Channel, data Ev) {
 		if data.Type == "donation" {
-			amount := parseAmount(data.Message[0].Amount) * 100
+			amount := parseAmount(data.Message[0].Amount)
 			sourceCurrency := strings.ToLower(data.Message[0].Currency)
 			if sourceCurrency != s.currency {
 				converted := s.converter.Convert(int(amount), sourceCurrency, s.currency)
 				log.Printf("Converted %v %v to %v %v", amount, sourceCurrency, converted, s.currency)
 				amount = converted
 			}
+			log.Println("Amount: ", amount)
 			events <- companion.StreamEvent{
 				EventType: companion.EventTypeDono,
 				Amount:    amount,
@@ -86,11 +87,11 @@ func (s *streamlabs) Connect(events chan<- companion.StreamEvent, messages chan<
 
 func parseAmount(input interface{}) int {
 	asString := fmt.Sprint(input)
-	num, err := strconv.Atoi(asString)
+	num, err := strconv.ParseFloat(asString, 32)
 	if err != nil {
 		return -1
 	}
-	return num
+	return int(num * 100)
 }
 
 type Ev struct {
