@@ -45,6 +45,10 @@ func (l *loader) Load() (*companion.Config, error) {
 		return nil, errors.New("must give at least one event to trigger on")
 	}
 
+	if c.Currency == "" {
+		c.Currency = "EUR"
+	}
+
 	return c, nil
 }
 

@@ -20,11 +20,11 @@ const (
 func main() {
 	ui := trayicon.New()
 
-	err := setupLogging()
-	if err != nil {
-		ui.ErrorMessage("%v", err.Error())
-		return
-	}
+	//err := setupLogging()
+	//if err != nil {
+	//	ui.ErrorMessage("%v", err.Error())
+	//	return
+	//}
 
 	time.Sleep(100 * time.Millisecond)
 	log.Println("Companion starting...")
@@ -47,7 +47,7 @@ func main() {
 	messages := make(chan companion.ChatMessage)
 
 	if conf.Streamlabs != "" {
-		sl := streamlabs.New(conf.Streamlabs)
+		sl := streamlabs.New(conf.Streamlabs, conf.Currency)
 		err := sl.Connect(events, messages)
 
 		if err != nil {

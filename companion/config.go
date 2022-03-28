@@ -25,6 +25,7 @@ type Config struct {
 
 	Twitch     string `yaml:"twitch"`
 	Streamlabs string `yaml:"streamlabs"`
+	Currency   string `yaml:"currency"`
 
 	Squirters []string `yaml:"squirters"`
 
