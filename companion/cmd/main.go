@@ -21,11 +21,11 @@ const (
 func main() {
 	ui := trayicon.New()
 
-	//err := setupLogging()
-	//if err != nil {
-	//	ui.ErrorMessage("%v", err.Error())
-	//	return
-	//}
+	err := setupLogging()
+	if err != nil {
+		ui.ErrorMessage("%v", err.Error())
+		return
+	}
 
 	time.Sleep(100 * time.Millisecond)
 	log.Println("Companion starting...")
@@ -79,6 +79,7 @@ func main() {
 
 	var squirters squirter.Squirters
 
+	log.Println("squirters: ", conf.Squirters)
 	if len(conf.Squirters) > 0 {
 		for _, s := range conf.Squirters {
 			squirters = append(squirters, squirter.New(s))
@@ -104,7 +105,7 @@ func main() {
 			}
 		case e := <-events:
 			if conf.HasEvent(e) && time.Now().After(timeout) {
-				log.Printf("%v of %v: Squirt for %v", e.EventType, e.Amount, conf.Duration)
+				log.Printf("Got %v (%v): Squirt for %v", e.EventType, e.Amount, conf.Duration)
 				ui.SetActive(conf.Duration)
 				squirters.Squirt(conf.Duration)
 				timeout = time.Now().Add(conf.Cooldown + conf.Duration)

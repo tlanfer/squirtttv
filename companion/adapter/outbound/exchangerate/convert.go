@@ -33,7 +33,7 @@ func (c *converter) Convert(fromAmount int, fromCurrency string, toCurrency stri
 
 func getRates(toCurrency string) (*ConversionRates, error) {
 
-	log.Println("download exchange rates for", toCurrency)
+	log.Println("Downloading exchange rates for", toCurrency)
 	resp, err := http.Get(fmt.Sprintf("http://www.floatrates.com/daily/%v.json", strings.ToLower(toCurrency)))
 	if err != nil {
 		return nil, err

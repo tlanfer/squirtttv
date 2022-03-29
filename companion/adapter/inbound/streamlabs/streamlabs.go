@@ -67,10 +67,11 @@ func (s *streamlabs) Connect(events chan<- companion.StreamEvent, messages chan<
 			sourceCurrency := strings.ToLower(data.Message[0].Currency)
 			if sourceCurrency != s.currency {
 				converted := s.converter.Convert(int(amount), sourceCurrency, s.currency)
-				log.Printf("Converted %v %v to %v %v", amount, sourceCurrency, converted, s.currency)
+				log.Printf("Streamlabs donation: %.2f %v converted to %.2f %v", float32(amount)/100, sourceCurrency, float32(converted)/100, s.currency)
 				amount = converted
+			} else {
+				log.Printf("Streamlabs donation: %.2f %v", float32(amount)/100, s.currency)
 			}
-			log.Println("Amount: ", amount)
 			events <- companion.StreamEvent{
 				EventType: companion.EventTypeDono,
 				Amount:    amount,
