@@ -42,7 +42,7 @@ func (l *loader) Load() (*companion.Config, error) {
 		return nil, errors.New("spray time must be at least 500ms")
 	}
 
-	if len(c.Events) == 0 {
+	if len(c.Events) == 0 && len(c.ChatTriggers) == 0 {
 		return nil, errors.New("must give at least one event to trigger on")
 	}
 

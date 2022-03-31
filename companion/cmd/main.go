@@ -79,7 +79,6 @@ func main() {
 
 	var squirters squirter.Squirters
 
-	log.Println("squirters: ", conf.Squirters)
 	if len(conf.Squirters) > 0 {
 		for _, s := range conf.Squirters {
 			squirters = append(squirters, squirter.New(s))

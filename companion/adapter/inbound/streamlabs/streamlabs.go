@@ -41,6 +41,7 @@ func (s *streamlabs) Connect(events chan<- companion.StreamEvent, messages chan<
 
 	client, err := gosocketio.Dial(
 		gosocketio.GetUrl("sockets.streamlabs.com", 443, true)+"&token="+s.token,
+		//gosocketio.GetUrl("localhost", 80, false)+"&token="+s.token,
 		transport.GetDefaultWebsocketTransport(),
 	)
 	if err != nil {
@@ -56,6 +57,8 @@ func (s *streamlabs) Connect(events chan<- companion.StreamEvent, messages chan<
 
 	err = client.On(gosocketio.OnDisconnection, func(c *gosocketio.Channel) {
 		log.Printf("Streamlabs disconnected")
+		time.Sleep(3 * time.Second)
+		go s.Connect(events, messages)
 	})
 	if err != nil {
 		return fmt.Errorf("failed to subscribe to disconnects: %w", err)
