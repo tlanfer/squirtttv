@@ -55,7 +55,7 @@ void setupWebserver(){
   AsyncElegantOTA.begin(&server);    // Start ElegantOTA
 
   server.onNotFound([](AsyncWebServerRequest *request){
-    request->redirect("https://github.com/tlanfer/squirtianna");
+    request->redirect("https://github.com/tlanfer/squirtttv");
   });
 
   
