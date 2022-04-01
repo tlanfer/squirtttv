@@ -39,6 +39,7 @@ func TestConfig_HasEvent(t *testing.T) {
 		{StreamEvent{EventTypeDono, 15}, false},
 		{StreamEvent{EventTypeDono, 25}, true},
 		{StreamEvent{EventTypeDono, 150}, true},
+		{StreamEvent{EventTypeDono, 500}, true},
 	}
 	for i, tt := range tests {
 		t.Run(fmt.Sprint(i), func(t *testing.T) {

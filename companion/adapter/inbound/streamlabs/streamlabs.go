@@ -37,12 +37,12 @@ type Message struct {
 
 func (s *streamlabs) Connect(events chan<- companion.StreamEvent, messages chan<- companion.ChatMessage) error {
 	websocketTransport := transport.GetDefaultWebsocketTransport()
-	websocketTransport.PingInterval = 20 * time.Second
+	websocketTransport.PingInterval = 15 * time.Second
 
 	client, err := gosocketio.Dial(
 		gosocketio.GetUrl("sockets.streamlabs.com", 443, true)+"&token="+s.token,
 		//gosocketio.GetUrl("localhost", 80, false)+"&token="+s.token,
-		transport.GetDefaultWebsocketTransport(),
+		websocketTransport,
 	)
 	if err != nil {
 		return fmt.Errorf("failed to subscribe to create client: %w", err)
