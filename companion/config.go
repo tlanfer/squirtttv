@@ -3,6 +3,7 @@ package companion
 import (
 	"gopkg.in/yaml.v3"
 	"io"
+	"log"
 	"strings"
 	"time"
 )
@@ -21,7 +22,7 @@ type ConfigLoader interface {
 
 type Config struct {
 	Cooldown time.Duration `yaml:"cooldown"`
-	Duration time.Duration `yaml:"duration"`
+	Duration SquirtPattern `yaml:"duration"`
 
 	Twitch     string `yaml:"twitch"`
 	Streamlabs string `yaml:"streamlabs"`
@@ -34,19 +35,25 @@ type Config struct {
 }
 
 type Event struct {
-	Type EventType `yaml:"type"`
-	Min  int       `yaml:"min"`
-	Max  int       `yaml:"max,omitempty"`
+	Type    EventType     `yaml:"type"`
+	Min     int           `yaml:"min"`
+	Max     int           `yaml:"max,omitempty"`
+	Pattern SquirtPattern `yaml:"duration,omitempty"`
 }
 
 type ChatTrigger struct {
-	Role    ChatRole `yaml:"role"`
-	User    string   `yaml:"user,omitempty"`
-	Message string   `yaml:"message"`
+	Role    ChatRole      `yaml:"role"`
+	User    string        `yaml:"user,omitempty"`
+	Message string        `yaml:"message"`
+	Pattern SquirtPattern `yaml:"duration,omitempty"`
 }
 
-func (c Config) HasEvent(ev StreamEvent) bool {
-	for _, e := range c.Events {
+func (c Config) GetEvent(ev StreamEvent) (bool, *SquirtPattern) {
+	defaultPattern := c.Duration
+
+	var match *Event
+
+	for i, e := range c.Events {
 
 		if ev.EventType != e.Type {
 			continue
@@ -60,13 +67,30 @@ func (c Config) HasEvent(ev StreamEvent) bool {
 			continue
 		}
 
-		return true
+		log.Println("found a match: ", e)
+
+		if match == nil {
+			match = &c.Events[i]
+		}
+
+		if e.Min > match.Min {
+			match = &e
+		}
 	}
 
-	return false
+	if match != nil {
+		if len(match.Pattern) == 0 {
+			return true, &defaultPattern
+		} else {
+			return true, &match.Pattern
+		}
+	}
+
+	return false, nil
 }
 
-func (c Config) HasChatTrigger(message ChatMessage) bool {
+func (c Config) GetChatTrigger(message ChatMessage) (bool, *SquirtPattern) {
+	defaultPattern := c.Duration
 	for _, e := range c.ChatTriggers {
 
 		if message.Role < e.Role {
@@ -81,10 +105,14 @@ func (c Config) HasChatTrigger(message ChatMessage) bool {
 			continue
 		}
 
-		return true
+		if len(e.Pattern) == 0 {
+			return true, &defaultPattern
+		} else {
+			return true, &e.Pattern
+		}
 	}
 
-	return false
+	return false, nil
 }
 
 func (c Config) Dump(o io.Writer) {

@@ -43,6 +43,7 @@ func main() {
 			os.Exit(1)
 		}
 	}
+	//conf.Dump(os.Stdout)
 
 	converter, err := exchangerate.New(conf.Currency)
 	if err != nil {
@@ -93,21 +94,34 @@ func main() {
 
 	timeout := time.Now()
 
+	patternSquirt := func(p companion.SquirtPattern) {
+		timeout = time.Now()
+		for _, d := range p {
+			timeout = timeout.Add(d)
+		}
+
+		for i, d := range p {
+			if i%2 == 0 {
+				ui.SetActive(d)
+				squirters.Squirt(d)
+			}
+			time.Sleep(d)
+		}
+	}
+
 	for {
 		select {
 		case m := <-messages:
-			if conf.HasChatTrigger(m) && time.Now().After(timeout) {
+			hasTrigger, pattern := conf.GetChatTrigger(m)
+			if hasTrigger && time.Now().After(timeout) {
 				log.Printf("Message from %v: %v -> Squirt for %v", m.User, m.Message, conf.Duration)
-				ui.SetActive(conf.Duration)
-				squirters.Squirt(conf.Duration)
-				timeout = time.Now().Add(conf.Cooldown + conf.Duration)
+				go patternSquirt(*pattern)
 			}
 		case e := <-events:
-			if conf.HasEvent(e) && time.Now().After(timeout) {
+			hasEvent, pattern := conf.GetEvent(e)
+			if hasEvent && time.Now().After(timeout) {
 				log.Printf("Got %v (%v): Squirt for %v", e.EventType, e.Amount, conf.Duration)
-				ui.SetActive(conf.Duration)
-				squirters.Squirt(conf.Duration)
-				timeout = time.Now().Add(conf.Cooldown + conf.Duration)
+				go patternSquirt(*pattern)
 			}
 		case <-ui.OnQuit():
 			log.Println("Quitting!")
@@ -119,13 +133,16 @@ func main() {
 }
 
 func setupLogging() error {
+	if os.Getenv("LOG_CONSOLE") == "" {
 
-	file, err := os.OpenFile("companion.log", os.O_CREATE|os.O_RDWR|os.O_APPEND, os.ModePerm)
-	if err != nil {
-		return err
+		file, err := os.OpenFile("companion.log", os.O_CREATE|os.O_RDWR|os.O_APPEND, os.ModePerm)
+		if err != nil {
+			return err
+		}
+
+		log.SetOutput(file)
+
 	}
-
-	log.SetOutput(file)
 
 	return nil
 }

@@ -38,8 +38,14 @@ func (l *loader) Load() (*companion.Config, error) {
 		return nil, errors.New("need either a twitch channel or a streamlabs token. see config.example.yaml for an example")
 	}
 
-	if c.Duration < 500*time.Millisecond {
-		return nil, errors.New("spray time must be at least 500ms")
+	if len(c.Duration) == 0 {
+		c.Duration = []time.Duration{1 * time.Second}
+	}
+
+	for _, duration := range c.Duration {
+		if duration < 500*time.Millisecond {
+			duration = 500 * time.Millisecond
+		}
 	}
 
 	if len(c.Events) == 0 && len(c.ChatTriggers) == 0 {
@@ -63,7 +69,7 @@ func (l *loader) Example() {
 
 	c := &companion.Config{
 		Cooldown: 5 * time.Second,
-		Duration: 1 * time.Second,
+		Duration: []time.Duration{1 * time.Second},
 		Squirters: []string{
 			"192.168.1.200",
 		},
@@ -75,6 +81,16 @@ func (l *loader) Example() {
 			{Type: companion.EventTypeDono, Min: 20, Max: 30},
 			{Type: companion.EventTypeDono, Min: 100},
 			{Type: companion.EventTypeSub, Min: 10},
+			{Type: companion.EventTypeSub, Min: 25, Pattern: companion.SquirtPattern{
+				3 * time.Second,
+			}},
+			{Type: companion.EventTypeSub, Min: 50, Pattern: companion.SquirtPattern{
+				1 * time.Second,
+				500 * time.Millisecond,
+				2 * time.Second,
+				500 * time.Millisecond,
+				3 * time.Second,
+			}},
 		},
 		ChatTriggers: []companion.ChatTrigger{
 			{
