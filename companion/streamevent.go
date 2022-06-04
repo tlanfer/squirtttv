@@ -5,9 +5,12 @@ import "fmt"
 type EventType string
 
 const (
-	EventTypeBits = "bits"
-	EventTypeDono = "dono"
-	EventTypeSub  = "subs"
+	EventTypeBits  = "bits"
+	EventTypeDono  = "dono"
+	EventTypeSub   = "subs"
+	EventTypeT1Sub = "tier1"
+	EventTypeT2Sub = "tier2"
+	EventTypeT3Sub = "tier3"
 )
 
 type StreamEvent struct {

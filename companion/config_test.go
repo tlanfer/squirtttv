@@ -14,6 +14,10 @@ func TestConfig_HasEvent(t *testing.T) {
 	sqTwo := SquirtPattern{2 * time.Second}
 	sqThree := SquirtPattern{3 * time.Second}
 	sqFour := SquirtPattern{4 * time.Second}
+	sqFive := SquirtPattern{1234 * time.Millisecond}
+	sqSix := SquirtPattern{2345 * time.Millisecond}
+	sqSeven := SquirtPattern{3456 * time.Millisecond}
+	sq8 := SquirtPattern{8 * time.Millisecond}
 
 	c := Config{
 		Duration: sqDefault,
@@ -45,6 +49,26 @@ func TestConfig_HasEvent(t *testing.T) {
 				Type: EventTypeDono,
 				Min:  200,
 			},
+			{
+				Type:    EventTypeT3Sub,
+				Pattern: sqFive,
+			},
+			{
+				Type:    EventTypeT3Sub,
+				Pattern: sqSix,
+				Min:     15,
+			},
+			{
+				Type:    EventTypeT1Sub,
+				Pattern: sqSeven,
+				Min:     10,
+				Max:     10,
+			},
+			{
+				Type:    EventTypeT2Sub,
+				Pattern: sq8,
+				Min:     2,
+			},
 		}}
 
 	tests := []struct {
@@ -59,15 +83,21 @@ func TestConfig_HasEvent(t *testing.T) {
 		{StreamEvent{EventTypeDono, 25}, true, &sqThree},
 		{StreamEvent{EventTypeDono, 150}, true, &sqFour},
 		{StreamEvent{EventTypeDono, 500}, true, &sqDefault},
+		{StreamEvent{EventTypeT3Sub, 10}, true, &sqFive},
+		{StreamEvent{EventTypeT3Sub, 20}, true, &sqSix},
+		{StreamEvent{EventTypeT2Sub, 1}, false, nil},
+		{StreamEvent{EventTypeT1Sub, 10}, true, &sqSeven},
+		{StreamEvent{EventTypeT1Sub, 11}, false, nil},
 	}
 
-	for i, tt := range tests {
-		t.Run(fmt.Sprint(i), func(t *testing.T) {
+	for _, tt := range tests {
+		t.Run(fmt.Sprintf("%v_%v", tt.ev.EventType, tt.ev.Amount), func(t *testing.T) {
 			got, p := c.GetEvent(tt.ev)
 			if got != tt.want {
 				t.Errorf("HasEvent() = %v, want %v", got, tt.want)
 			}
 
+			t.Logf("Event: %v", tt.ev)
 			t.Logf("Want: %v", tt.wantPattern)
 			t.Logf("Got:  %v", p)
 

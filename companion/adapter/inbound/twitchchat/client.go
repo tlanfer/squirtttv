@@ -49,17 +49,21 @@ func (t *twitchChat) FakerShaker(interval time.Duration) {
 
 	for {
 		time.Sleep(interval)
-		switch rand.Intn(1) {
+		switch rand.Intn(5) {
 		case 0:
 			t.client.Say("channel", fmt.Sprintf("bits --bitscount %v Woohoo!", rand.Intn(500)))
+			//fallthrough
 		case 1:
 			t.client.Say("channel", fmt.Sprintf("subgift --tier %v --username glEnd2", rand.Intn(3)+1))
+			//fallthrough
 		case 2:
 			t.client.Say("channel", fmt.Sprintf("submysterygift --count %v --username zebiniasis", rand.Intn(15)+1))
+			//fallthrough
 		case 3:
-			t.client.Say("channel", fmt.Sprintf("subscription --tier %v --username glEnd2", rand.Intn(3)+1))
+			t.client.Say("channel", fmt.Sprintf("subscription --tier %v", rand.Intn(3)+1))
+			//fallthrough
 		case 4:
-			t.client.Say("channel", "resubscription")
+			t.client.Say("channel", fmt.Sprintf("resubscription --tier %v", rand.Intn(3)+1))
 		}
 
 	}
@@ -105,10 +109,18 @@ func (t *twitchChat) Connect(events chan<- companion.StreamEvent, messages chan<
 				EventType: companion.EventTypeSub,
 				Amount:    count,
 			}
-		case "resub":
-			fallthrough
+
 		case "sub":
 			fallthrough
+
+		case "resub":
+			plan, _ := strconv.Atoi(message.MsgParams["msg-param-sub-plan"])
+			months, _ := strconv.Atoi(message.MsgParams["msg-param-cumulative-months"])
+			events <- companion.StreamEvent{
+				EventType: planToEventType(plan),
+				Amount:    months,
+			}
+
 		case "subgift":
 			events <- companion.StreamEvent{
 				EventType: companion.EventTypeSub,
@@ -125,4 +137,15 @@ func (t *twitchChat) Connect(events chan<- companion.StreamEvent, messages chan<
 	}()
 
 	return nil
+}
+
+func planToEventType(plan int) companion.EventType {
+	switch plan {
+	case 3000:
+		return companion.EventTypeT3Sub
+	case 2000:
+		return companion.EventTypeT2Sub
+	default:
+		return companion.EventTypeT1Sub
+	}
 }

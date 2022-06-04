@@ -67,7 +67,7 @@ func main() {
 	}
 
 	if conf.Twitch != "" {
-		//tc := twitchchat.New(conf.Twitch, twitchchat.WithFdgt(), twitchchat.WithFaker(3270*time.Millisecond))
+		//tc := twitchchat.New(conf.Twitch, twitchchat.WithFdgt(), twitchchat.WithFaker(1*time.Second))
 		tc := twitchchat.New(conf.Twitch)
 		err := tc.Connect(events, messages)
 

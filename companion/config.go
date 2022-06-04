@@ -67,17 +67,20 @@ func (c Config) GetEvent(ev StreamEvent) (bool, *SquirtPattern) {
 			continue
 		}
 
-		log.Println("found a match: ", e)
+		//log.Println("Looks good:", c.Events[i], "-", i)
 
 		if match == nil {
 			match = &c.Events[i]
+			log.Println("Mark match")
 		}
 
 		if e.Min > match.Min {
-			match = &e
+			match = &c.Events[i]
+			log.Println("Move match")
 		}
 	}
 
+	log.Println("found a match: ", match)
 	if match != nil {
 		if len(match.Pattern) == 0 {
 			return true, &defaultPattern
