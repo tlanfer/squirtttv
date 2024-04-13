@@ -37,7 +37,7 @@ type Message struct {
 
 func (s *streamlabs) Connect(events chan<- companion.StreamEvent, messages chan<- companion.ChatMessage) error {
 	websocketTransport := transport.GetDefaultWebsocketTransport()
-	websocketTransport.PingInterval = 15 * time.Second
+	websocketTransport.PingInterval = 5 * time.Second
 
 	client, err := gosocketio.Dial(
 		gosocketio.GetUrl("sockets.streamlabs.com", 443, true)+"&token="+s.token,
