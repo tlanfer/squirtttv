@@ -7,6 +7,7 @@
 I ported this to run on an esp32 c2. Works great so far, but might not be compatible with other controllers.
 
 I also added an "is this really a squirter?" detection to the mDNS auto discovery stuff.
+That means old squirters wont be detected unless you set "legacy: true" in the config file.
 
 ## What is this
 
