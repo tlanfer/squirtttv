@@ -2,6 +2,14 @@
 
 [![GitHub release](https://img.shields.io/github/release/tlanfer/squirtttv?include_prereleases=&sort=semver&color=blue)](https://github.com/tlanfer/squirtttv/releases)
 
+## Update 21.04.2024
+
+I ported this to run on an esp32 c2. Works great so far, but might not be compatible with other controllers.
+
+I also added an "is this really a squirter?" detection to the mDNS auto discovery stuff.
+
+## What is this
+
 This lets you squirt someone with water when something happens on twitch.
 
 * [Building the hardware](#building-the-hardware)
