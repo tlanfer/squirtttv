@@ -99,6 +99,11 @@ func (l *loader) Example() {
 				Role:    companion.ChatRoleMod,
 				Message: "!squirt",
 			},
+			{
+				Role:    companion.ChatRolePleb,
+				Message: "!squirtinator",
+				User:    "tlanfer",
+			},
 		},
 	}
 	yaml.NewEncoder(file).Encode(c)
