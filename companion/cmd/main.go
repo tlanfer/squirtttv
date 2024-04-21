@@ -47,7 +47,7 @@ func main() {
 
 	converter, err := exchangerate.New(conf.Currency)
 	if err != nil {
-		ui.ErrorMessage("Currency %v can not be converted to.", conf.Currency)
+		ui.ErrorMessage("Currency %v can not be converted to: %v", conf.Currency, err)
 		ui.Quit()
 		os.Exit(1)
 	}
@@ -82,14 +82,10 @@ func main() {
 
 	if len(conf.Squirters) > 0 {
 		for _, s := range conf.Squirters {
-			squirters = append(squirters, squirter.New(s))
+			squirters.Add(s)
 		}
 	} else {
-		squirters = squirter.Find()
-	}
-
-	for _, s := range squirters {
-		log.Printf("Use %v", s)
+		go squirters.Find()
 	}
 
 	timeout := time.Now()

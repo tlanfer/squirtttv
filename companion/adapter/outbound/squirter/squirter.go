@@ -1,19 +1,20 @@
 package squirter
 
 import (
+	"context"
 	"fmt"
-	"github.com/hashicorp/mdns"
+	"github.com/grandcat/zeroconf"
 	"log"
 	"net/http"
 	"time"
 )
 
-const servicename = "squirtttv"
-
-type Squirters []Squirter
+type Squirters struct {
+	all []Squirter
+}
 
 func (s *Squirters) Squirt(duration time.Duration) {
-	for _, sq := range *s {
+	for _, sq := range s.all {
 		go sq.Squirt(duration)
 	}
 }
@@ -22,26 +23,42 @@ type Squirter interface {
 	Squirt(duration time.Duration)
 }
 
-func Find() Squirters {
+func (s *Squirters) Add(host string) {
+	sq := squirter{host: host}
+	if sq.isAvailable() {
+		s.all = append(s.all, &sq)
+		log.Printf("Squirter at %v added", host)
+	} else {
+		log.Printf("Squirter at %v invalid", host)
+	}
+}
 
-	var squirters []Squirter
+func (s *Squirters) Find() {
+	resolver, err := zeroconf.NewResolver(nil)
+	if err != nil {
+		log.Println("Failed to initialize resolver:", err.Error())
+	}
 
-	entriesCh := make(chan *mdns.ServiceEntry, 4)
-	go func() {
-		for entry := range entriesCh {
-			h := entry.AddrV4.String()
-			squirters = append(squirters, &squirter{
-				host: h,
-			})
+	entries := make(chan *zeroconf.ServiceEntry)
+	go func(results <-chan *zeroconf.ServiceEntry) {
+		for entry := range results {
+			if len(entry.AddrIPv4) < 1 {
+				continue
+			}
+			h := entry.AddrIPv4[0].String()
+
+			s.Add(h)
 		}
-	}()
-	params := mdns.DefaultParams(fmt.Sprintf("_%v._tcp", servicename))
-	params.Entries = entriesCh
-	params.DisableIPv6 = true
-	_ = mdns.Query(params)
-	close(entriesCh)
+	}(entries)
 
-	return squirters
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+	defer cancel()
+	err = resolver.Browse(ctx, "_squirtttv._tcp", "", entries)
+	if err != nil {
+		log.Println("Failed to browse:", err.Error())
+	}
+
+	<-ctx.Done()
 }
 
 func New(host string) Squirter {
@@ -62,4 +79,23 @@ func (s *squirter) Squirt(duration time.Duration) {
 	if err != nil {
 		log.Printf("Failed to send event to %v", s)
 	}
+}
+
+func (s *squirter) isAvailable() bool {
+
+	resp, err := http.Get(fmt.Sprintf("http://%v/identify", s.host))
+	if err != nil {
+		log.Printf("failed to identify squirter on %v: %v", s.host, err)
+		return false
+	}
+	defer func() {
+		_ = resp.Body.Close()
+	}()
+
+	if resp.Header.Get("Server") != "squirtttv/2.0" {
+		log.Printf("device at %v is not a squirter", s.host)
+		return false
+	}
+
+	return true
 }

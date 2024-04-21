@@ -108,6 +108,89 @@ func TestConfig_HasEvent(t *testing.T) {
 	}
 }
 
+func TestConfig_AlasConfig(t *testing.T) {
+
+	def := SquirtPattern{1 * time.Second}
+	twoSeconds := SquirtPattern{2 * time.Second}
+	threeSeconds := SquirtPattern{3 * time.Second}
+	fourSeconds := SquirtPattern{4 * time.Second}
+	onOff5times := SquirtPattern{1 * time.Second, 200 * time.Millisecond, 1 * time.Second, 200 * time.Millisecond, 1 * time.Second, 200 * time.Millisecond, 1 * time.Second, 200 * time.Millisecond, 1 * time.Second}
+	t2 := SquirtPattern{500 * time.Millisecond, 200 * time.Millisecond, 500 * time.Millisecond}
+	t3 := SquirtPattern{500 * time.Millisecond, 200 * time.Millisecond, 500 * time.Millisecond, 200 * time.Millisecond, 500 * time.Millisecond}
+
+	c := Config{
+		Duration: def,
+		Events: []Event{
+			{
+				Type: EventTypeBits,
+				Min:  500,
+			}, {
+				Type:    EventTypeBits,
+				Min:     1000,
+				Pattern: twoSeconds,
+			}, {
+				Type:    EventTypeBits,
+				Min:     2000,
+				Pattern: threeSeconds,
+			}, {
+				Type:    EventTypeBits,
+				Min:     1500,
+				Max:     1500,
+				Pattern: fourSeconds,
+			}, {
+				Type:    EventTypeBits,
+				Min:     5000,
+				Pattern: onOff5times,
+			}, {
+				Type: EventTypeDono,
+				Min:  500,
+			}, {
+				Type:    EventTypeDono,
+				Min:     1000,
+				Pattern: twoSeconds,
+			}, {
+				Type:    EventTypeDono,
+				Min:     2000,
+				Pattern: threeSeconds,
+			}, {
+				Type:    EventTypeDono,
+				Min:     5000,
+				Pattern: onOff5times,
+			}, {
+				Type:    EventTypeT2Sub,
+				Pattern: t2,
+			}, {
+				Type:    EventTypeT3Sub,
+				Pattern: t3,
+			},
+		}}
+
+	tests := []struct {
+		ev          StreamEvent
+		want        bool
+		wantPattern *SquirtPattern
+	}{
+		{StreamEvent{EventTypeBits, 1500}, true, &fourSeconds},
+	}
+
+	for _, tt := range tests {
+		t.Run(fmt.Sprintf("%v_%v", tt.ev.EventType, tt.ev.Amount), func(t *testing.T) {
+			got, p := c.GetEvent(tt.ev)
+			if got != tt.want {
+				t.Errorf("HasEvent() = %v, want %v", got, tt.want)
+			}
+
+			t.Logf("Event: %v", tt.ev)
+			t.Logf("Want: %v", tt.wantPattern)
+			t.Logf("Got:  %v", p)
+
+			if !reflect.DeepEqual(p, tt.wantPattern) {
+				t.Errorf("HasEvent() = %v, want pattern %v", p, tt.wantPattern)
+			}
+		})
+	}
+}
+
 func TestConfig_HasChatTrigger(t *testing.T) {
 
 	sqDefault := SquirtPattern{500 * time.Millisecond}
