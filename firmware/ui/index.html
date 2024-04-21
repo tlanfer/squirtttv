@@ -5,6 +5,10 @@
     <title>Squirtttv</title>
     <style>
         @font-face {
+            font-family: "OpenSans";
+            src: url("OpenSans.ttf");
+        }
+        @font-face {
             font-family: "Amatic SC";
             src: url("AmaticSC-Regular.ttf");
         }
@@ -17,8 +21,8 @@
         html {
             background-color: hsl(210, 6%, 13%);
             color: #ddd;
-            font-family: 'Amatic SC', cursive;
-            font-size: 20pt;
+            font-family: 'OpenSans', cursive;
+            font-size: 14pt;
             height: 100%;
         }
 
@@ -37,8 +41,8 @@
 
         section {
             width: 350px;
-            padding: 0.5em 1em;
-            margin: .5em;
+            padding: 1em 1.5em;
+            margin: 1em;
             border-radius: 10px;
 
             background-color: hsl(210, 6%, 11%);
@@ -64,7 +68,7 @@
             border-radius: 5px;
             padding: 5px;
 
-            font-family: 'Amatic SC', cursive;
+            font-family: cursive;
             font-size: 20pt;
             color: white;
             background-image: linear-gradient(169deg, hsl(216deg, 100%, 30%), #35698f);
@@ -84,7 +88,7 @@
             background-image: linear-gradient(169deg, hsl(216deg, 30%, 30%), hsl(205deg, 16%, 38%));
             color: #777;
         }
-        
+
         button.hold {
             background-image:
                     linear-gradient(to right, #de7c6d 0%, tomato 50%, transparent 50%),
@@ -128,24 +132,24 @@
     <h1>💦 Squirtttv 💦</h1>
     <section id="squirt-testing">
         <h1>🧪 Testing</h1>
-        <div>
+        <p>
             You can use this to do some test squirts for setting up the proper duration.
-        </div>
+        </p>
         <form onsubmit="return false">
             <label for="squirt_duration">1000ms</label>
-            <input type="range" value="1000" min="500" max="5000" name="duration" id="squirt_duration">
+            <input type="range" value="1000" min="500" max="5000" step="50" name="duration" id="squirt_duration">
             <button>Squirt!</button>
         </form>
     </section>
     <section id="firmware-update">
         <h1>⚡ Danger zone</h1>
         <p>
-            Here you can update the software.
+            Here you can modify the software (you probably dont want to)
         </p>
-        <p>
-            <span>💾</span> <a href="/update">Firmware update</a><br>
-            <span>🖼</span> <a href="/update">Change web ui</a>
-        </p>
+        <small>
+            <span>💾</span> <a href="/setup">Reconfigure & firmware update</a><br>
+            <span>🖼</span> <a href="/edit">Change web ui</a>
+        </small>
     </section>
 </main>
 <footer>

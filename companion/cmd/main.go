@@ -8,6 +8,7 @@ import (
 	"companion/adapter/outbound/exchangerate"
 	"companion/adapter/outbound/squirter"
 	"companion/adapter/outbound/trayicon"
+	"errors"
 	"log"
 	"os"
 	"time"
@@ -33,7 +34,7 @@ func main() {
 	loader := yamlconfig.New(filename, example)
 	conf, err := loader.Load()
 	if err != nil {
-		if err == companion.ErrConfigNotFound {
+		if errors.Is(err, companion.ErrConfigNotFound) {
 			ui.ErrorMessage("No %v found, please create one. You can use %v as an example.", filename, example)
 			ui.Quit()
 			os.Exit(1)
