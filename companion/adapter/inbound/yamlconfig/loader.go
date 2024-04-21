@@ -31,7 +31,9 @@ func (l *loader) Load() (*companion.Config, error) {
 	}
 	defer file.Close()
 
-	c := &companion.Config{}
+	c := &companion.Config{
+		AllowLegacy: false,
+	}
 	yaml.NewDecoder(file).Decode(c)
 
 	if c.Twitch == "" && c.Streamlabs == "" {

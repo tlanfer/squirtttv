@@ -3,7 +3,6 @@ package companion
 import (
 	"gopkg.in/yaml.v3"
 	"io"
-	"log"
 	"strings"
 	"time"
 )
@@ -28,7 +27,8 @@ type Config struct {
 	Streamlabs string `yaml:"streamlabs"`
 	Currency   string `yaml:"currency"`
 
-	Squirters []string `yaml:"squirters"`
+	Squirters   []string `yaml:"squirters"`
+	AllowLegacy bool     `yaml:"allowLegacy"`
 
 	Events       []Event       `yaml:"events"`
 	ChatTriggers []ChatTrigger `yaml:"chat"`
@@ -71,16 +71,13 @@ func (c Config) GetEvent(ev StreamEvent) (bool, *SquirtPattern) {
 
 		if match == nil {
 			match = &c.Events[i]
-			log.Println("Mark match")
 		}
 
 		if e.Min > match.Min {
 			match = &c.Events[i]
-			log.Println("Move match")
 		}
 	}
 
-	log.Println("found a match: ", match)
 	if match != nil {
 		if len(match.Pattern) == 0 {
 			return true, &defaultPattern

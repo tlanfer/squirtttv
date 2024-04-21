@@ -10,7 +10,12 @@ import (
 )
 
 type Squirters struct {
-	all []Squirter
+	all          []Squirter
+	allowInvalid bool
+}
+
+func NewSquirters(allowInvalid bool) Squirters {
+	return Squirters{allowInvalid: !allowInvalid}
 }
 
 func (s *Squirters) Squirt(duration time.Duration) {
@@ -25,7 +30,7 @@ type Squirter interface {
 
 func (s *Squirters) Add(host string) {
 	sq := squirter{host: host}
-	if sq.isAvailable() {
+	if sq.isAvailable() || s.allowInvalid {
 		s.all = append(s.all, &sq)
 		log.Printf("Squirter at %v added", host)
 	} else {
@@ -74,10 +79,10 @@ func (s *squirter) String() string {
 }
 
 func (s *squirter) Squirt(duration time.Duration) {
-	http.DefaultClient.Timeout = 1 * time.Second
+	http.DefaultClient.Timeout = 5 * time.Second
 	_, err := http.Get(fmt.Sprintf("http://%v/squirt?duration=%v", s.host, duration.Milliseconds()))
 	if err != nil {
-		log.Printf("Failed to send event to %v", s)
+		log.Printf("Failed to send event to %v: %v", s, err)
 	}
 }
 

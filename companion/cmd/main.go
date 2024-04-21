@@ -78,7 +78,7 @@ func main() {
 		}
 	}
 
-	var squirters squirter.Squirters
+	squirters := squirter.NewSquirters(conf.AllowLegacy)
 
 	if len(conf.Squirters) > 0 {
 		for _, s := range conf.Squirters {
@@ -110,13 +110,13 @@ func main() {
 		case m := <-messages:
 			hasTrigger, pattern := conf.GetChatTrigger(m)
 			if hasTrigger && time.Now().After(timeout) {
-				log.Printf("Message from %v: %v -> Squirt for %v", m.User, m.Message, conf.Duration)
+				log.Printf("Message from %v: %v -> Squirt for %v", m.User, m.Message, *pattern)
 				go patternSquirt(*pattern)
 			}
 		case e := <-events:
 			hasEvent, pattern := conf.GetEvent(e)
 			if hasEvent && time.Now().After(timeout) {
-				log.Printf("Got %v (%v): Squirt for %v", e.EventType, e.Amount, conf.Duration)
+				log.Printf("Got %v (%v): Squirt for %v", e.EventType, e.Amount, *pattern)
 				go patternSquirt(*pattern)
 			}
 		case <-ui.OnQuit():
