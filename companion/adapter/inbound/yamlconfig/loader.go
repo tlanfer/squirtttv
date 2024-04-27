@@ -36,8 +36,8 @@ func (l *loader) Load() (*companion.Config, error) {
 	}
 	yaml.NewDecoder(file).Decode(c)
 
-	if c.Twitch == "" && c.Streamlabs == "" {
-		return nil, errors.New("need either a twitch channel or a streamlabs token. see config.example.yaml for an example")
+	if c.Twitch == "" && c.Streamlabs == "" && c.StreamElements == "" {
+		return nil, errors.New("need either a twitch channel, a streamlabs token or a streamelements JWT. see config.example.yaml for an example")
 	}
 
 	if len(c.Duration) == 0 {
@@ -75,8 +75,9 @@ func (l *loader) Example() {
 		Squirters: []string{
 			"192.168.1.200",
 		},
-		Twitch:     "tlanfer",
-		Streamlabs: "eyJ0eX.... get yours from https://streamlabs.com/dashboard#/settings/api-settings > API Tokens > Your Socket API Token",
+		Twitch:         "tlanfer",
+		Streamlabs:     "eyJ0eX.... get yours from https://streamlabs.com/dashboard#/settings/api-settings > API Tokens > Your Socket API Token",
+		StreamElements: "eyJ0eX.... get yours from https://streamelements.com/dashboard/account/channels and grab the JWT Token",
 		Events: []companion.Event{
 			{Type: companion.EventTypeBits, Min: 0, Max: 100},
 			{Type: companion.EventTypeBits, Min: 200, Max: 250},

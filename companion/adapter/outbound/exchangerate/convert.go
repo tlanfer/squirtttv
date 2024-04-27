@@ -30,6 +30,7 @@ type converter struct {
 
 func (c *converter) Convert(fromAmount int, fromCurrency string, toCurrency string) int {
 	fromCurrency = strings.ToLower(fromCurrency)
+	toCurrency = strings.ToLower(toCurrency)
 
 	return int(c.rates[toCurrency] * float64(fromAmount))
 
@@ -54,8 +55,7 @@ func getRates(toCurrency string) (map[string]float64, error) {
 	}
 
 	for currency, factor := range data.Rates {
-		inverseFactor := 1 / factor
-		conversion := toCurrencyConversion * inverseFactor
+		conversion := toCurrencyConversion * factor
 
 		conversions[strings.ToLower(currency)] = conversion
 	}

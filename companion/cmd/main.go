@@ -2,6 +2,7 @@ package main
 
 import (
 	"companion"
+	"companion/adapter/inbound/streamelements"
 	"companion/adapter/inbound/streamlabs"
 	"companion/adapter/inbound/twitchchat"
 	"companion/adapter/inbound/yamlconfig"
@@ -44,7 +45,6 @@ func main() {
 			os.Exit(1)
 		}
 	}
-	//conf.Dump(os.Stdout)
 
 	converter, err := exchangerate.New(conf.Currency)
 	if err != nil {
@@ -62,6 +62,17 @@ func main() {
 
 		if err != nil {
 			ui.ErrorMessage("Failed to connect to streamlabs: %s", err.Error())
+		} else {
+			ui.SetStreamlabsConnected(true)
+		}
+	}
+
+	if conf.StreamElements != "" {
+		se := streamelements.New(conf.StreamElements, conf.Currency, converter)
+		err := se.Connect(events, messages)
+
+		if err != nil {
+			ui.ErrorMessage("Failed to connect to streamelements: %s", err.Error())
 		} else {
 			ui.SetStreamlabsConnected(true)
 		}

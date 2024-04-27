@@ -23,9 +23,10 @@ type Config struct {
 	Cooldown time.Duration `yaml:"cooldown"`
 	Duration SquirtPattern `yaml:"duration"`
 
-	Twitch     string `yaml:"twitch"`
-	Streamlabs string `yaml:"streamlabs"`
-	Currency   string `yaml:"currency"`
+	Twitch         string `yaml:"twitch"`
+	Streamlabs     string `yaml:"streamlabs"`
+	StreamElements string `yaml:"streamelements"`
+	Currency       string `yaml:"currency"`
 
 	Squirters   []string `yaml:"squirters"`
 	AllowLegacy bool     `yaml:"allowLegacy"`
