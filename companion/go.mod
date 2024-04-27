@@ -30,4 +30,4 @@ require (
 	golang.org/x/sys v0.19.0 // indirect
 )
 
-replace github.com/ambelovsky/gosf-socketio => C:\Users\tlanf\Documents\Development\git\github.com\tlanfer\gosf-socketio
+replace github.com/ambelovsky/gosf-socketio => github.com/tlanfer/gosf-socketio v0.0.0-20240427143833-6913f7bc340e
