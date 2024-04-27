@@ -51,8 +51,8 @@ func (s streamelements) Connect(events chan<- companion.StreamEvent, messages ch
 		log.Printf("StreamElements disconnected")
 	})
 
-	client.On("authenticated", func(c *gosocketio.Channel, data Authenticated) {
-		log.Println("Authenticated: ", data.Message)
+	client.On("authenticated", func(c *gosocketio.Channel) {
+		log.Println("StreamElements connected")
 	})
 
 	client.On("unauthorized", func(c *gosocketio.Channel) {
@@ -82,18 +82,6 @@ func (s streamelements) Connect(events chan<- companion.StreamEvent, messages ch
 		return fmt.Errorf("failed to subscribe to event: %w", err)
 	}
 
-	if err := client.On("event:test", func(c *gosocketio.Channel, data string) {
-		log.Println("event:test: ", data)
-	}); err != nil {
-		return fmt.Errorf("failed to subscribe to event:test: %w", err)
-	}
-
-	//if err := client.On("event:update", func(c *gosocketio.Channel, data string) {
-	//	log.Println("event:update: ", data)
-	//}); err != nil {
-	//	return fmt.Errorf("failed to subscribe to event:update: %w", err)
-	//}
-
 	return nil
 }
 
@@ -103,13 +91,6 @@ func unmarshalEvent(data string, dto any) error {
 		return err
 	}
 	return json.Unmarshal(parsed[0], &dto)
-}
-
-type Authenticated struct {
-	Channel  string `json:"channelId"`
-	ClientId string `json:"clientId"`
-	Message  string `json:"message"`
-	Project  string `json:"project"`
 }
 
 type Event struct {
