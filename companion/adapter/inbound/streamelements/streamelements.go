@@ -113,20 +113,10 @@ type Authenticated struct {
 }
 
 type Event struct {
-	Type      string    `json:"type"`
-	Provider  string    `json:"provider"`
-	Channel   string    `json:"channel"`
-	CreatedAt time.Time `json:"createdAt"`
-	Data      struct {
+	Type    string `json:"type"`
+	Channel string `json:"channel"`
+	Data    struct {
 		Amount   float64 `json:"amount"`
 		Currency string  `json:"currency"`
-		Username string  `json:"username"`
-		TipID    string  `json:"tipId"`
-		Message  string  `json:"message"`
-		Avatar   string  `json:"avatar"`
 	} `json:"data"`
-	ID                 string    `json:"_id"`
-	UpdatedAt          time.Time `json:"updatedAt"`
-	ActivityID         string    `json:"activityId"`
-	SessionEventsCount int       `json:"sessionEventsCount"`
 }
