@@ -7,6 +7,7 @@ import (
 	gosocketio "github.com/ambelovsky/gosf-socketio"
 	"github.com/ambelovsky/gosf-socketio/transport"
 	"log"
+	"strings"
 	"time"
 )
 
@@ -70,12 +71,21 @@ func (s streamelements) Connect(events chan<- companion.StreamEvent, messages ch
 			return
 		}
 
-		eventAmount := int(event.Data.Amount * 100)
-		convertedAmount := s.converter.Convert(eventAmount, event.Data.Currency, s.currency)
+		fromCurrency := strings.ToLower(event.Data.Currency)
+		toCurrency := strings.ToLower(s.currency)
+		originalAmount := int(event.Data.Amount * 100)
+		finalAmount := originalAmount
+
+		if fromCurrency == toCurrency {
+			log.Printf("StreamElements donation: %.2f %v", float32(finalAmount)/100, fromCurrency)
+		} else {
+			finalAmount = s.converter.Convert(originalAmount, event.Data.Currency, s.currency)
+			log.Printf("StreamElements donation: %.2f %v converted to %.2f %v", float32(originalAmount)/100, fromCurrency, float32(finalAmount)/100, toCurrency)
+		}
 
 		events <- companion.StreamEvent{
 			EventType: companion.EventTypeDono,
-			Amount:    convertedAmount,
+			Amount:    finalAmount,
 		}
 
 	}); err != nil {
