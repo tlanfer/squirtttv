@@ -56,7 +56,7 @@ void setupWebserver() {
     myIP = WiFi.softAPIP();
     Serial.print("My IP 1 ");
     Serial.println(myIP.toString());
-    server.startCaptivePortal("ESP_AP", "123456789", "/setup");
+    server.startCaptivePortal("Squirtttv", "123456789", "/setup");
     myIP = WiFi.softAPIP();
     Serial.print("\nMy IP 2 ");
     Serial.println(myIP.toString());
