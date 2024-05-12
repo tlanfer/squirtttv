@@ -15,7 +15,7 @@ type Squirters struct {
 }
 
 func NewSquirters(allowInvalid bool) Squirters {
-	return Squirters{allowInvalid: !allowInvalid}
+	return Squirters{allowInvalid: allowInvalid}
 }
 
 func (s *Squirters) Squirt(duration time.Duration) {
