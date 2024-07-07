@@ -1,7 +1,7 @@
 package discovery
 
 import (
-	"companion/adapter/outbound/scanner"
+	"companion/internal/adapter/outbound/scanner"
 	"encoding/json"
 	"net/http"
 )

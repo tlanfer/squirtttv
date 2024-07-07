@@ -1,7 +1,7 @@
 package test
 
 import (
-	"companion/adapter/outbound/squirter"
+	"companion/internal/adapter/outbound/squirter"
 	"companion/internal/config"
 	"companion/internal/eventprocssor"
 	"encoding/json"

@@ -1,7 +1,7 @@
 package scanner
 
 import (
-	"companion/adapter/outbound/squirter"
+	"companion/internal/adapter/outbound/squirter"
 	"context"
 	"github.com/grandcat/zeroconf"
 	"log"

@@ -1,7 +1,7 @@
 package eventprocssor
 
 import (
-	"companion/adapter/outbound/squirter"
+	"companion/internal/adapter/outbound/squirter"
 	"companion/internal/config"
 	"math/rand"
 	"time"
