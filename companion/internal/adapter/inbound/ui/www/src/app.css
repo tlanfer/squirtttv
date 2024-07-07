@@ -1,0 +1,22 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Display:ital,wght@0,100..900;1,100..900&display=swap');
+
+html, body {
+    height: 100%;
+    margin: 0;
+    font-family: "Noto Sans Display", sans-serif;
+    background-color: hsl(0, 0%, 96%);
+    background-image: linear-gradient(to top, hsl(200, 50%, 90%), transparent);
+    background-attachment: fixed;
+
+}
+
+h1, h2, h3 {
+    font-family: "Urbanist", sans-serif;
+}
+
+
+.help {
+    font-size: 0.8em;
+    color: hsl(0, 0%, 50%);
+    padding-bottom: 0.5em;
+}
