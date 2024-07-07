@@ -2,6 +2,19 @@
 
 [![GitHub release](https://img.shields.io/github/release/tlanfer/squirtttv?include_prereleases=&sort=semver&color=blue)](https://github.com/tlanfer/squirtttv/releases)
 
+## Update 07.07.2024
+
+Brand new version, comes with a fancy little UI to make setup easier. No more fiddling with yaml files 🎉
+Almost the whole companion app has been rewritten. Its probably riddled with bugs. But it worked on a quick test.
+
+What changed:
+
+* WebUI: Right click the tray icon and select settings to open the settings UI.
+  * See on the web ui if your integrations are connected
+* Multiple devices:
+  * You can now configure any number of devices and use them at the same time
+  * You can use different devices for different alerts, multiple at the same time, or randomize between them
+
 ## Update 21.04.2024
 
 I ported this to run on an esp32 c2. Works great so far, but might not be compatible with other controllers.
