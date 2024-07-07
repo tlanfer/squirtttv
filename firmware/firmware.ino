@@ -9,7 +9,7 @@
 #define ADMIN_USERNAME "admin"
 #define ADMIN_PASSWORD "admin"
 
-#define PUMP_PIN D4
+#define PUMP_PIN 6
 #define FORMAT_LITTLEFS_IF_FAILED true
 
 AsyncFsWebServer server(80, LittleFS, "myServer");
@@ -50,19 +50,25 @@ void getFsInfo(fsInfo_t* fsInfo) {
 }
 
 void setupWebserver() {
+  server.setAP("squirtttv", "");
   IPAddress myIP = server.startWiFi(15000);
   if (!myIP) {
     Serial.println("\n\nNo WiFi connection, start AP and Captive Portal\n");
     myIP = WiFi.softAPIP();
     Serial.print("My IP 1 ");
     Serial.println(myIP.toString());
-    server.startCaptivePortal("Squirtttv", "123456789", "/setup");
+    server.startCaptivePortal("squirtttv", "", "/");
     myIP = WiFi.softAPIP();
     Serial.print("\nMy IP 2 ");
     Serial.println(myIP.toString());
+    captiveRun = true;
   }
   server.setSetupPageTitle("Simple Async FS Captive Web Server");
-  server.serveStatic("/", LittleFS, "/").setDefaultFile("index.html");
+  
+  
+  if(!captiveRun){
+    server.serveStatic("/", LittleFS, "/").setDefaultFile("index.html");
+  }
 
   server.on("/identify", HTTP_GET, [](AsyncWebServerRequest *request) {
     AsyncWebServerResponse *response = request->beginResponse(200, "text/plain", "This is a streamer squirter");
@@ -91,7 +97,7 @@ void setupWebserver() {
 }
 
 void setupMdns(){
-  if (!MDNS.begin("esp32")) {
+  if (!MDNS.begin("squirtttv")) {
       Serial.println("Error setting up MDNS responder!");
       while(1) {
           delay(1000);
@@ -113,7 +119,7 @@ void squirt(int t) {
   digitalWrite(PUMP_PIN, HIGH);
   int squirtTo = millis() + t;
   while (millis() < squirtTo){
-    delay(1);
+    delay(10);
   }
   digitalWrite(PUMP_PIN, LOW);
 }

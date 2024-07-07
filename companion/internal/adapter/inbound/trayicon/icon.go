@@ -46,7 +46,7 @@ func (u *ui) onReady() {
 	for {
 		select {
 		case <-settingsItem.ClickedCh:
-			openBrowser("http://localhost:3080")
+			OpenUI()
 
 		case <-quit.ClickedCh:
 			u.quitChan <- "quit"
@@ -60,6 +60,10 @@ func (u *ui) onExit() {}
 func (u *ui) Quit() {
 	systray.Quit()
 	time.Sleep(100 * time.Millisecond)
+}
+
+func OpenUI() {
+	openBrowser("http://localhost:3080")
 }
 
 func openBrowser(url string) {

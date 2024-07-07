@@ -9,9 +9,9 @@ import ResubsT2 from "./pages/ResubsT2.svelte";
 
 export default [
     {
-        title: "Devices",
+        title: "Settings",
         path: "/",
-        component: Devices,
+        component: Settings,
     },
     {
         title: "Devices",

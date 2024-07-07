@@ -1,7 +1,9 @@
 package yamlconfig
 
 import (
+	"companion/internal/adapter/inbound/trayicon"
 	"companion/internal/config"
+	"github.com/sqweek/dialog"
 	"gopkg.in/yaml.v3"
 	"log"
 	"os"
@@ -22,7 +24,9 @@ type loader struct {
 func (l *loader) Load() {
 	file, err := os.OpenFile(l.filename, os.O_RDONLY, os.ModePerm)
 	if err != nil {
-		log.Println("config file not found")
+		if dialog.Message("No config file found. Open UI to configure things?").YesNo() {
+			trayicon.OpenUI()
+		}
 		return
 	}
 	defer file.Close()
