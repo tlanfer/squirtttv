@@ -17,7 +17,7 @@ const (
 
 type StreamEvent struct {
 	EventType EventType
-	Amount    int
+	Amount    float64
 }
 
 func (s StreamEvent) String() string {

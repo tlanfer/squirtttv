@@ -45,22 +45,22 @@ export const currency = derived(config, ($config) => {
 
     if (baseCurrency === "usd") {
         return {
-            unit: "p",
-            units: "p"
+            unit: "$",
+            units: "$"
         }
     }
 
     if (baseCurrency === "gbp") {
         return {
-            unit: "p",
-            units: "p"
+            unit: "£",
+            units: "£"
         }
     }
 
     if (baseCurrency === "eur") {
         return {
-            unit: "cent",
-            units: "cents"
+            unit: "€",
+            units: "€"
         }
     }
 

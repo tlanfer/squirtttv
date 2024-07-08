@@ -28,6 +28,8 @@ func New() {
 	config.Subscribe(func(c config.Config) {
 		if c.Settings.BaseCurrency == "" {
 			c.Settings.BaseCurrency = "eur"
+			config.Set(c)
+			return
 		}
 
 		if baseCurrency != c.Settings.BaseCurrency {
@@ -37,11 +39,11 @@ func New() {
 	})
 }
 
-func Convert(fromAmount int, fromCurrency string, toCurrency string) int {
+func Convert(fromAmount float64, fromCurrency string) float64 {
 	fromCurrency = strings.ToLower(fromCurrency)
-	toCurrency = strings.ToLower(toCurrency)
+	baseCurrency = strings.ToLower(baseCurrency)
 
-	return int(rates[toCurrency] * float64(fromAmount))
+	return rates[fromCurrency] * fromAmount
 
 }
 
@@ -58,17 +60,18 @@ func updateRates() {
 		return
 	}
 
-	loweCaseCurrency := strings.ToUpper(baseCurrency)
+	upperCaseBaseCurrency := strings.ToUpper(baseCurrency)
 	conversions := map[string]float64{}
 
-	toCurrencyConversion, exists := data.Rates[loweCaseCurrency]
+	toCurrencyConversion, exists := data.Rates[upperCaseBaseCurrency]
 	if !exists {
-		log.Println("Cant handle unit", loweCaseCurrency)
+		log.Println("Cant handle unit", upperCaseBaseCurrency)
 		return
 	}
 
 	for currency, factor := range data.Rates {
-		conversion := toCurrencyConversion * factor
+		//log.Println("Converting", currency, "to", upperCaseBaseCurrency, "with rate", factor, "and base rate", toCurrencyConversion)
+		conversion := toCurrencyConversion / factor
 
 		conversions[strings.ToLower(currency)] = conversion
 	}

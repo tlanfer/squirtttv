@@ -32,7 +32,7 @@ func (p *processor) processEvent(event internal.StreamEvent) {
 	}
 }
 
-func findMatch(amount int, events []config.Event) *config.Event {
+func findMatch(amount float64, events []config.Event) *config.Event {
 
 	var bestEvent *config.Event
 

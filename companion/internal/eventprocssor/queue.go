@@ -14,13 +14,13 @@ type queuedAction struct {
 var queue = make(chan queuedAction, 1000)
 var stop = make(chan struct{})
 
-func run() {
+func (p *processor) run() {
 	for {
 		select {
 		case action := <-queue:
 			if len(action.devices) > 0 {
 				sendPattern(action.p, action.devices)
-				time.Sleep(3 * time.Second)
+				time.Sleep(time.Duration(p.config.Settings.SprayPause))
 			}
 		case <-stop:
 			return

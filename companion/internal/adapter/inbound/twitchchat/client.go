@@ -56,7 +56,7 @@ func (t *twitchChat) RegisterHandlers() {
 		if message.Bits > 0 {
 			t.events <- internal.StreamEvent{
 				EventType: internal.EventTypeBits,
-				Amount:    message.Bits,
+				Amount:    float64(message.Bits),
 			}
 		} else {
 			role := internal.ChatRolePleb
@@ -83,7 +83,7 @@ func (t *twitchChat) RegisterHandlers() {
 			count, _ := strconv.Atoi(message.MsgParams["msg-param-mass-gift-count"])
 			t.events <- internal.StreamEvent{
 				EventType: internal.EventTypeGift,
-				Amount:    count,
+				Amount:    float64(count),
 			}
 
 		case "sub":
@@ -94,7 +94,7 @@ func (t *twitchChat) RegisterHandlers() {
 			months, _ := strconv.Atoi(message.MsgParams["msg-param-cumulative-months"])
 			t.events <- internal.StreamEvent{
 				EventType: planToEventType(plan),
-				Amount:    months,
+				Amount:    float64(months),
 			}
 
 		case "subgift":
@@ -108,7 +108,7 @@ func (t *twitchChat) RegisterHandlers() {
 
 func (t *twitchChat) Connect() {
 	if t.channel == "" {
-		log.Println("No twitch channel set")
+		log.Println("Twitch channel not set, skipping connection")
 		return
 	}
 	t.client.Join(t.channel)

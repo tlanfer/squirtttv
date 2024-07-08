@@ -10,6 +10,7 @@
     export let onSave = () => {};
     export let onDelete = () => {};
 
+    export let decimals = 0;
     export let units = "months";
     export let showModal = false;
     export let event = {};
@@ -58,7 +59,7 @@
                     <label><input type="radio" name="amount_mode" bind:group={event.match} value="minimum">At least</label>
                     <label><input type="radio" name="amount_mode" bind:group={event.match} value="exact">Exactly</label>
                 </p>
-                <input type="number" class="amount_input" bind:value={event.amount}>
+                <input type="number" class="amount_input" step={1/Math.pow(10, decimals)} bind:value={event.amount}>
             </div>
             <div class="pattern">
                 <h3>Pattern</h3>

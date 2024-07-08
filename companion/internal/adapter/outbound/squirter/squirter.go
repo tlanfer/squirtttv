@@ -16,8 +16,13 @@ func (s Squirter) String() string {
 }
 
 func (s Squirter) Squirt(duration time.Duration) {
-	http.DefaultClient.Timeout = 5 * time.Second
-	_, err := http.Get(fmt.Sprintf("http://%v/squirt?duration=%v", s.Host, duration.Milliseconds()))
+	t := http.DefaultTransport.(*http.Transport).Clone()
+	t.DisableKeepAlives = true
+	c := &http.Client{
+		Transport: t,
+		Timeout:   5 * time.Second,
+	}
+	_, err := c.Get(fmt.Sprintf("http://%v/squirt?duration=%v", s.Host, duration.Milliseconds()))
 	if err != nil {
 		log.Printf("Failed to send event to %v: %v", s, err)
 	}

@@ -51,8 +51,8 @@
 
 <EventPage {addEvent}>
     {#each events as event, i}
-        <EventItem unit={unit} units={units} event={event} onSelect={()=>{ selectEvent(i) }} />
+        <EventItem unit={unit} units={units} event={event} decimals={2} onSelect={()=>{ selectEvent(i) }} />
     {/each}
 </EventPage>
 
-<EventEditor bind:showModal units={units} event={selectedEvent} onSave={save} onDelete={del} />
+<EventEditor bind:showModal units={units} event={selectedEvent} onSave={save} decimals={2} onDelete={del} />

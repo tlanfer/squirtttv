@@ -4,6 +4,8 @@
 
     export let onSelect = () => {
     };
+
+    export let decimals = 0;
     export let unit;
     export let units;
 
@@ -15,7 +17,7 @@
 
 <div class="item" transition:scale={{duration: 100}}>
     <div class="value">
-        <span class="number">{event.amount}<small>{event.match === "minimum" ? "+" : ""}</small></span>
+        <span class="number">{Number(event.amount).toFixed(decimals)}<small>{event.match === "minimum" ? "+" : ""}</small></span>
         <span class="unit">{event.amount === 1 ? unit : units}</span>
     </div>
     <button class="edit" on:click={onSelect}>Edit <span class="material-symbols-outlined">edit</span></button>

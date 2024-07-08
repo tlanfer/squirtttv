@@ -3,6 +3,7 @@ package eventprocssor
 import (
 	"companion/internal"
 	"companion/internal/config"
+	"time"
 )
 
 func New(events <-chan internal.StreamEvent, messages <-chan internal.ChatMessage) {
@@ -18,7 +19,7 @@ func New(events <-chan internal.StreamEvent, messages <-chan internal.ChatMessag
 	})
 
 	go p.receive()
-	go run()
+	go p.run()
 }
 
 type processor struct {
@@ -28,15 +29,23 @@ type processor struct {
 }
 
 func (p *processor) receive() {
+	cooldownEnd := time.Now()
 	for {
 		select {
 		case event := <-p.events:
+			if time.Now().Before(cooldownEnd) {
+				continue
+			}
 			p.processEvent(event)
 		case message := <-p.messages:
+			if time.Now().Before(cooldownEnd) {
+				continue
+			}
 			p.processMessage(message)
 		}
+		cooldownEnd = time.Now().Add(time.Duration(p.config.Settings.GlobalCooldown))
 	}
 }
 
-func (p *processor) processMessage(msg internal.ChatMessage) {
+func (p *processor) processMessage(_ internal.ChatMessage) {
 }

@@ -2,6 +2,7 @@ package streamelements
 
 import (
 	"companion/internal"
+	"companion/internal/adapter/outbound/exchangerate"
 	"companion/internal/config"
 	"companion/internal/state"
 	"encoding/json"
@@ -9,6 +10,7 @@ import (
 	gosocketio "github.com/ambelovsky/gosf-socketio"
 	"github.com/ambelovsky/gosf-socketio/transport"
 	"log"
+	"strings"
 	"time"
 )
 
@@ -41,6 +43,7 @@ type streamelements struct {
 
 func (s streamelements) Connect() {
 	if s.token == "" {
+		log.Println("StreamElements token not set, skipping connection")
 		return
 	}
 
@@ -93,17 +96,9 @@ func (s streamelements) Connect() {
 			return
 		}
 
-		//fromCurrency := strings.ToLower(event.Data.Currency)
-		//toCurrency := strings.ToLower(s.currency)
-		originalAmount := int(event.Data.Amount * 100)
-		finalAmount := originalAmount
-
-		//if fromCurrency == toCurrency {
-		//	log.Printf("StreamElements donation: %.2f %v", float32(finalAmount)/100, fromCurrency)
-		//} else {
-		//	finalAmount = s.converter.Convert(originalAmount, event.Data.Currency, s.currency)
-		//	log.Printf("StreamElements donation: %.2f %v converted to %.2f %v", float32(originalAmount)/100, fromCurrency, float32(finalAmount)/100, toCurrency)
-		//}
+		fromCurrency := strings.ToLower(event.Data.Currency)
+		originalAmount := event.Data.Amount * 100
+		finalAmount := exchangerate.Convert(originalAmount, fromCurrency)
 
 		s.events <- internal.StreamEvent{
 			EventType: internal.EventTypeDono,

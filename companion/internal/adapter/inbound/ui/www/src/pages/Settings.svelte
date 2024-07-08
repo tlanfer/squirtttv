@@ -24,7 +24,7 @@
 </p>
 
 <form>
-    <label for="channel">
+    <label>
         Twitch Channel
         <span class="help">
             The name of the twitch channel you want to monitor
@@ -32,7 +32,7 @@
         <input type="text" id="channel" name="channel" bind:value={$config.settings.twitch}>
     </label>
 
-    <label for="streamlabs">
+    <label>
         Streamlabs Socket API Token
         <span class="help">
             The <b>Socket API Token</b> you get from Streamlabs. Go to <a href="https://streamlabs.com/dashboard#/settings/api-settings" target="_blank">your streamlabs dashboard</a>, in your account settings > API settings > API tokens to get it.
@@ -40,7 +40,7 @@
         <input type="password" id="streamlabs" name="streamlabs" bind:value={$config.settings.streamlabs}>
     </label>
 
-    <label for="streamelements">
+    <label>
         Streamelements Socket API Token
         <span class="help">
             The <b>JWT Token</b> you get from Streamelements to connect to their socket API. Go to <a href="https://streamelements.com/dashboard/account/channels" target="_blank">your streamelements dashboard</a>, in your account settings > Channels to get it.
@@ -48,7 +48,7 @@
         <input type="password" id="streamelements" name="streamelements" bind:value={$config.settings.streamelements}>
     </label>
 
-    <label for="baseCurrency">
+    <label>
         Base Currency
         <span class="help">
             The currency you use in streamlabs/streamelements. This will be the currency Squirtttv uses to calculate the value of other currencies.<br />
@@ -58,6 +58,22 @@
             <option value="usd">US Dollar (usd)</option>
             <option value="gbp">British Pound (gbp)</option>
         </select>
+    </label>
+
+    <label>
+        Pause between sprays
+        <span class="help">
+            The time to wait between two events. Enter a duration, like '100ms' for 100 milliseconds, '1s' for 1 second, '30s' for 30 seconds, etc.
+        </span>
+        <input type="text" bind:value={$config.settings.sprayPause}>
+    </label>
+
+    <label>
+        Global Cooldown
+        <span class="help">
+            Ignore events for a certain amount of time after an event. Enter a duration, like '100ms' for 100 milliseconds, '1s' for 1 second, '30s' for 30 seconds, etc.
+        </span>
+        <input type="text" bind:value={$config.settings.globalCooldown}>
     </label>
 </form>
 

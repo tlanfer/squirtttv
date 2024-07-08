@@ -7,6 +7,7 @@ import (
 	"gopkg.in/yaml.v3"
 	"log"
 	"os"
+	"time"
 )
 
 func Init(filename string) {
@@ -24,12 +25,23 @@ type loader struct {
 func (l *loader) Load() {
 	file, err := os.OpenFile(l.filename, os.O_RDONLY, os.ModePerm)
 	if err != nil {
+		config.Set(config.Config{
+			Settings: config.Settings{
+				BaseCurrency:   "eur",
+				SprayPause:     config.Duration(3 * time.Second),
+				GlobalCooldown: config.Duration(0 * time.Second),
+			},
+		})
 		if dialog.Message("No config file found. Open UI to configure things?").YesNo() {
 			trayicon.OpenUI()
 		}
 		return
 	}
-	defer file.Close()
+	defer func() {
+		if err := file.Close(); err != nil {
+			log.Println("error closing config file:", err)
+		}
+	}()
 
 	c := config.Config{}
 	if err := yaml.NewDecoder(file).Decode(&c); err != nil {
@@ -47,7 +59,12 @@ func (l *loader) Write(c config.Config) {
 	if err != nil {
 		return
 	}
-	defer file.Close()
+
+	defer func() {
+		if err := file.Close(); err != nil {
+			log.Println("error closing config file:", err)
+		}
+	}()
 
 	if err := yaml.NewEncoder(file).Encode(c); err != nil {
 		return

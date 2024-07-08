@@ -2,6 +2,7 @@ package streamlabs
 
 import (
 	"companion/internal"
+	"companion/internal/adapter/outbound/exchangerate"
 	"companion/internal/config"
 	"companion/internal/state"
 	"fmt"
@@ -9,6 +10,7 @@ import (
 	"github.com/ambelovsky/gosf-socketio/transport"
 	"log"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -53,6 +55,7 @@ type Message struct {
 
 func (s *streamlabs) Connect() {
 	if s.token == "" {
+		log.Println("Streamlabs token not set, skipping connection")
 		return
 	}
 
@@ -90,17 +93,12 @@ func (s *streamlabs) Connect() {
 	err = client.On("event", func(c *gosocketio.Channel, data Ev) {
 		if data.Type == "donation" {
 			amount := parseAmount(data.Message[0].Amount)
-			//sourceCurrency := strings.ToLower(data.Message[0].Currency)
-			//if sourceCurrency != s.currency {
-			//	converted := s.converter.Convert(int(amount), sourceCurrency, s.currency)
-			//	log.Printf("Streamlabs donation: %.2f %v converted to %.2f %v", float32(amount)/100, sourceCurrency, float32(converted)/100, s.currency)
-			//	amount = converted
-			//} else {
-			//	log.Printf("Streamlabs donation: %.2f %v", float32(amount)/100, s.currency)
-			//}
+			sourceCurrency := strings.ToLower(data.Message[0].Currency)
+			converted := exchangerate.Convert(amount, sourceCurrency)
+
 			s.events <- internal.StreamEvent{
 				EventType: internal.EventTypeDono,
-				Amount:    amount,
+				Amount:    converted,
 			}
 		}
 	})
@@ -111,20 +109,20 @@ func (s *streamlabs) Connect() {
 	}
 }
 
-func parseAmount(input interface{}) int {
+func parseAmount(input interface{}) float64 {
 	asString := fmt.Sprint(input)
 	num, err := strconv.ParseFloat(asString, 32)
 	if err != nil {
 		return -1
 	}
-	return int(num * 100)
+	return num
 }
 
 type Ev struct {
 	For     string `json:"for"`
 	Type    string `json:"type"`
 	Message []struct {
-		Amount   interface{} `json:"amount"`
-		Currency string      `json:"currency"`
+		Amount   float64 `json:"amount"`
+		Currency string  `json:"currency"`
 	} `json:"message"`
 }
