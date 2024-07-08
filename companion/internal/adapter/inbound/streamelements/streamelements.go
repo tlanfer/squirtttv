@@ -10,7 +10,6 @@ import (
 	gosocketio "github.com/ambelovsky/gosf-socketio"
 	"github.com/ambelovsky/gosf-socketio/transport"
 	"log"
-	"strings"
 	"time"
 )
 
@@ -96,9 +95,11 @@ func (s streamelements) Connect() {
 			return
 		}
 
-		fromCurrency := strings.ToLower(event.Data.Currency)
-		originalAmount := event.Data.Amount * 100
-		finalAmount := exchangerate.Convert(originalAmount, fromCurrency)
+		log.Println("Donation received: ", event.Data.Amount)
+		originalAmount := event.Data.Amount
+		finalAmount := exchangerate.Convert(originalAmount, "usd")
+		finalAmount = float64(int(finalAmount*100)) / 100
+		log.Println("Converted donation amount: ", finalAmount)
 
 		s.events <- internal.StreamEvent{
 			EventType: internal.EventTypeDono,
