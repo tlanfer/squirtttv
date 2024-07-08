@@ -5,7 +5,6 @@ import (
 	"companion/internal/config"
 	"companion/internal/eventprocssor"
 	"encoding/json"
-	"log"
 	"math/rand"
 	"net/http"
 )
@@ -54,7 +53,7 @@ func NewHandler() http.Handler {
 			squirters = append(squirters, squirter.Squirter{Host: h})
 		}
 
-		log.Println("Adding to queue", d.Pattern, squirters)
+		//log.Println("Adding to queue", d.Pattern, squirters)
 		eventprocssor.AddToQueue(d.Pattern, squirters)
 	})
 }

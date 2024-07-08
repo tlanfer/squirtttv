@@ -95,11 +95,9 @@ func (s streamelements) Connect() {
 			return
 		}
 
-		log.Println("Donation received: ", event.Data.Amount)
 		originalAmount := event.Data.Amount
 		finalAmount := exchangerate.Convert(originalAmount, "usd")
 		finalAmount = float64(int(finalAmount*100)) / 100
-		log.Println("Converted donation amount: ", finalAmount)
 
 		s.events <- internal.StreamEvent{
 			EventType: internal.EventTypeDono,
