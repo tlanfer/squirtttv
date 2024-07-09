@@ -82,7 +82,7 @@ func (s *streamlabs) Connect() {
 	err = client.On(gosocketio.OnDisconnection, func(c *gosocketio.Channel) {
 		log.Printf("Streamlabs disconnected")
 		state.StreamlabsConnected = false
-		time.Sleep(10 * time.Second)
+		time.Sleep(3 * time.Second)
 		go s.Connect()
 	})
 	if err != nil {
@@ -111,7 +111,7 @@ func (s *streamlabs) Connect() {
 
 func parseAmount(input interface{}) float64 {
 	asString := fmt.Sprint(input)
-	num, err := strconv.ParseFloat(asString, 32)
+	num, err := strconv.ParseFloat(asString, 64)
 	if err != nil {
 		return -1
 	}

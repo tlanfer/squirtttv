@@ -31,22 +31,3 @@ func (p *processor) processEvent(event internal.StreamEvent) {
 		squirt(*ev)
 	}
 }
-
-func findMatch(amount float64, events []config.Event) *config.Event {
-
-	var bestEvent *config.Event
-
-	for _, event := range events {
-		if event.Match == "exact" && event.Amount == amount {
-			return &event
-		}
-
-		if event.Match == "minimum" && event.Amount <= amount {
-			if bestEvent == nil || event.Amount > bestEvent.Amount {
-				bestEvent = &event
-			}
-		}
-	}
-
-	return bestEvent
-}

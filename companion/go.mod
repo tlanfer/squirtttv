@@ -4,7 +4,7 @@ go 1.18
 
 require (
 	github.com/ambelovsky/gosf-socketio v0.0.0-20201109193639-add9d32f8b19
-	github.com/gempir/go-twitch-irc/v3 v3.0.0
+	github.com/gempir/go-twitch-irc/v3 v3.3.0
 	github.com/getlantern/systray v1.2.1
 	github.com/grandcat/zeroconf v1.0.0
 	github.com/sqweek/dialog v0.0.0-20220227145630-7a1c9e333fcf
