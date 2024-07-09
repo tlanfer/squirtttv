@@ -41,8 +41,8 @@ func findMatch(amount float64, events []config.Event) *config.Event {
 			return &event
 		}
 
-		if event.Match == "minimum" && event.Amount >= amount {
-			if bestEvent == nil || event.Amount < bestEvent.Amount {
+		if event.Match == "minimum" && event.Amount <= amount {
+			if bestEvent == nil || event.Amount > bestEvent.Amount {
 				bestEvent = &event
 			}
 		}
