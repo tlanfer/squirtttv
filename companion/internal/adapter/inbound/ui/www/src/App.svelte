@@ -48,6 +48,7 @@
         display: flex;
         flex-direction: row;
         justify-content: stretch;
+        align-items: start;
         gap: 3em;
 
         max-width: 1400px;

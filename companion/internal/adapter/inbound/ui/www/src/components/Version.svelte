@@ -1,26 +1,35 @@
 <script>
     import {version, runUpdate} from '../lib/version.js';
 
-    let updating = false;
+    let state = "ok";
     const initUpdate = async () => {
-        updating = true;
-        await runUpdate();
-        updating = false;
-        window.location.reload();
+        state = "updating";
+        const success = await runUpdate();
+        if( success ) {
+            state = "updated";
+        } else {
+            state = "error";
+        }
     };
 </script>
 
 <div>
-    {#if updating}
+    You are running {$version.version}.
+    {#if state==="ok"}
+        This is the latest version.
+    {/if}
+    {#if state==="old"}
+        Version {$version.latest} is available.
+        <button on:click={initUpdate}>Update now?</button>
+    {/if}
+    {#if state==="updating"}
         Updating, please wait...
-    {:else}
-        You are running v{$version.version}.
-        {#if $version.isLatest}
-            This is the latest version.
-        {:else }
-            Version v{$version.latest} is available.
-            <button on:click={initUpdate}>Update now?</button>
-        {/if}.
+    {/if}
+    {#if state==="updated"}
+        Updated to v{$version.latest}. Please restart the companion
+    {/if}
+    {#if state==="error"}
+        An error occurred. Please try again later.
     {/if}
 </div>
 

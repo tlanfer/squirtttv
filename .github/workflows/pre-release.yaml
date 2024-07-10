@@ -37,4 +37,4 @@ jobs:
             ${{ runner.os }}-go-
             
       - name: Build
-        run: cd companion && go build -ldflags -H=windowsgui -o ../companion.exe ./cmd
+        run: cd companion && go build -ldflags -H=windowsgui -o ../companion.exe ./cmd/companion

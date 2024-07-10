@@ -8,7 +8,8 @@ export const version = readable({version: "", latest:"", isLatest: true}, async 
 });
 
 export const runUpdate = async ()=> {
-    await fetch("/api/version", {
+    const res = await fetch("/api/version", {
         method: "POST"
     })
+    return res.status === 200
 }
