@@ -122,7 +122,7 @@ type Ev struct {
 	For     string `json:"for"`
 	Type    string `json:"type"`
 	Message []struct {
-		Amount   float64 `json:"amount"`
-		Currency string  `json:"currency"`
+		Amount   any    `json:"amount"`
+		Currency string `json:"currency"`
 	} `json:"message"`
 }
