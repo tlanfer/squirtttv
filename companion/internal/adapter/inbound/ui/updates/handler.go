@@ -47,7 +47,6 @@ func (h handler) get(w http.ResponseWriter, _ *http.Request) {
 }
 
 func (h handler) post(w http.ResponseWriter, _ *http.Request) {
-	log.Println("would update now")
 	err := update.Run()
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)

@@ -43,6 +43,7 @@ func Run() error {
 	if err != nil {
 		return fmt.Errorf("failed to get executable path: %v", err)
 	}
+	log.Println("updating executable", exe, "to version", latest.Version())
 
 	err = selfupdate.UpdateTo(context.Background(), latest.AssetURL, latest.AssetName, exe)
 	if err != nil {
