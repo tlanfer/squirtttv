@@ -1,7 +1,7 @@
 <script>
     import {version, runUpdate} from '../lib/version.js';
 
-    let state = "ok";
+    let state = $version.isLatest ? "ok" : "old";
     const initUpdate = async () => {
         state = "updating";
         const success = await runUpdate();
