@@ -11,9 +11,11 @@ import (
 	"companion/internal/adapter/inbound/ui/discovery"
 	"companion/internal/adapter/inbound/ui/status"
 	"companion/internal/adapter/inbound/ui/test"
+	"companion/internal/adapter/inbound/ui/updates"
 	"companion/internal/adapter/inbound/yamlconfig"
 	"companion/internal/adapter/outbound/exchangerate"
 	"companion/internal/adapter/outbound/scanner"
+	"companion/internal/adapter/outbound/update"
 	"companion/internal/eventprocssor"
 	"io"
 	"log"
@@ -22,13 +24,14 @@ import (
 	"time"
 )
 
-const (
-	filename = "config.yaml"
-	example  = "config.example.yaml"
+var (
+	version = "dev"
 )
 
 func main() {
-	yamlconfig.Init(filename)
+	update.Version = version
+
+	yamlconfig.Init()
 
 	icon := trayicon.New()
 
@@ -37,7 +40,6 @@ func main() {
 		icon.ErrorMessage("%v", err.Error())
 		return
 	}
-
 	time.Sleep(100 * time.Millisecond)
 	log.Println("Companion starting...")
 
@@ -46,6 +48,7 @@ func main() {
 	mux.Handle("/api/status", status.NewHandler())
 	mux.Handle("/api/discovery", discovery.NewHandler())
 	mux.Handle("/api/test", test.NewHandler())
+	mux.Handle("/api/version", updates.NewHandler(version))
 	mux.Handle("/", ui.NewHandler())
 
 	srv := http.Server{

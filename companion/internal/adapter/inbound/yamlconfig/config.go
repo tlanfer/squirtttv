@@ -10,7 +10,11 @@ import (
 	"time"
 )
 
-func Init(filename string) {
+const (
+	filename = "config.yaml"
+)
+
+func Init() {
 	l := loader{filename: filename}
 	l.Load()
 	config.Subscribe(func(c config.Config) {

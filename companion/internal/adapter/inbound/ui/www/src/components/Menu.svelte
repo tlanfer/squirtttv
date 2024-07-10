@@ -1,6 +1,7 @@
 <script>
 import SaveState from "./SaveState.svelte";
 import IntegrationState from "./IntegrationState.svelte";
+import Version from "./Version.svelte";
 </script>
 
 <h1>Squirtttv</h1>
@@ -25,6 +26,10 @@ import IntegrationState from "./IntegrationState.svelte";
 <div id="status">
     <SaveState />
     <IntegrationState />
+
+    <p>
+        <Version />
+    </p>
 
     <div class="hint">
         <b>Hint:</b>
