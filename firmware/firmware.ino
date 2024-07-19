@@ -9,7 +9,7 @@
 #define ADMIN_USERNAME "admin"
 #define ADMIN_PASSWORD "admin"
 
-#define PUMP_PIN 6
+#define PUMP_PIN D6
 #define FORMAT_LITTLEFS_IF_FAILED true
 
 AsyncFsWebServer server(80, LittleFS, "myServer");
@@ -50,7 +50,7 @@ void getFsInfo(fsInfo_t* fsInfo) {
 }
 
 void setupWebserver() {
-  server.setAP("squirtttv", "");
+  server.setAP("squirtttv", "splash");
   IPAddress myIP = server.startWiFi(15000);
   if (!myIP) {
     Serial.println("\n\nNo WiFi connection, start AP and Captive Portal\n");
