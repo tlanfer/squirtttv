@@ -9,8 +9,10 @@ import (
 
 var Version string
 
+const repoSlug = "tlanfer/squirtttv"
+
 func IsLatest() (string, bool, error) {
-	latest, found, err := selfupdate.DetectLatest(context.Background(), selfupdate.ParseSlug("tlanfer/squirtttv"))
+	latest, found, err := selfupdate.DetectLatest(context.Background(), selfupdate.ParseSlug(repoSlug))
 
 	if err != nil {
 		return "", false, fmt.Errorf("failed to detect latest version: %v", err)
@@ -24,7 +26,7 @@ func IsLatest() (string, bool, error) {
 }
 
 func Run() error {
-	latest, found, err := selfupdate.DetectLatest(context.Background(), selfupdate.ParseSlug("tlanfer/squirtttv"))
+	latest, found, err := selfupdate.DetectLatest(context.Background(), selfupdate.ParseSlug(repoSlug))
 
 	if err != nil {
 		return fmt.Errorf("failed to detect latest version: %v", err)
