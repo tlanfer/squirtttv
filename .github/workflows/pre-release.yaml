@@ -37,4 +37,14 @@ jobs:
             ${{ runner.os }}-go-
             
       - name: Build
-        run: cd companion && go build -ldflags -H=windowsgui -o ../companion.exe ./cmd/companion
+        run: cd companion && go generate ./... && go build -ldflags -H=windowsgui -o ../companion.exe ./cmd/companion
+        
+        
+      - uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "latest"
+          prerelease: true
+          title: "Development Build"
+          files: |
+            companion.exe

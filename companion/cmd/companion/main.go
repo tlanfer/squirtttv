@@ -15,7 +15,6 @@ import (
 	"companion/internal/adapter/inbound/yamlconfig"
 	"companion/internal/adapter/outbound/exchangerate"
 	"companion/internal/adapter/outbound/scanner"
-	"companion/internal/adapter/outbound/update"
 	"companion/internal/eventprocssor"
 	"io"
 	"log"
@@ -29,7 +28,6 @@ var (
 )
 
 func main() {
-	update.Version = version
 
 	yamlconfig.Init()
 
