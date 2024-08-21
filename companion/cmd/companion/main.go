@@ -66,6 +66,8 @@ func main() {
 	twitchchat.New(events, messages)
 	eventprocssor.New(events, messages)
 
+	defer catchCrashes()
+
 	<-icon.OnQuit()
 	icon.Quit()
 	_ = srv.Close()
@@ -79,4 +81,10 @@ func setupLogging() error {
 	log.SetOutput(io.MultiWriter(file, os.Stdout))
 
 	return nil
+}
+
+func catchCrashes() {
+	if r := recover(); r != nil {
+		log.Printf("Panic: %v", r)
+	}
 }
