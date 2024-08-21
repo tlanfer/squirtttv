@@ -3,6 +3,7 @@ package eventprocssor
 import (
 	"companion/internal/adapter/outbound/squirter"
 	"companion/internal/config"
+	"log"
 	"math/rand"
 	"time"
 )
@@ -21,8 +22,10 @@ func squirt(ev config.Event) {
 		hosts = ev.Devices
 
 	case "oneOf":
-		hosts = []string{
-			ev.Devices[rand.Intn(len(ev.Devices))],
+		if len(ev.Devices) == 0 {
+			log.Println("No devices to squirt for event", ev)
+		} else {
+			hosts = []string{ev.Devices[rand.Intn(len(ev.Devices))]}
 		}
 	}
 

@@ -3,6 +3,7 @@ package config
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"time"
 )
 
@@ -68,4 +69,8 @@ func (d *Duration) UnmarshalJSON(b []byte) error {
 	default:
 		return errors.New("invalid duration")
 	}
+}
+
+func (e Event) String() string {
+	return fmt.Sprintf("Event{Amount: %f, Match: %s, Pattern: %v, Choose: %s, Devices: %v}", e.Amount, e.Match, e.Pattern, e.Choose, e.Devices)
 }

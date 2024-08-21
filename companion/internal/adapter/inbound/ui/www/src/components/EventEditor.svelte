@@ -23,7 +23,7 @@
 
     let onSquirterSelect = (selectedSquirters) => {
         selectorActive = false;
-        event.squirters = [ ...event.squirters || [], ...selectedSquirters].filter(unique)
+        event.devices = [ ...event.squirters || [], ...selectedSquirters].filter(unique)
     }
 
     $: if(!showModal) {
@@ -35,14 +35,14 @@
     }
 
     function removeSquirter(squirter) {
-        event.squirters = event.squirters.filter(s => s !== squirter);
+        event.devices = event.devices.filter(s => s !== squirter);
     }
 
     function onTest() {
-        test(event.pattern, event.choose, event.squirters);
+        test(event.pattern, event.choose, event.devices);
     }
 
-    $: configValid = event.amount && event.pattern && event.choose && (event.choose === "all" || event.squirters);
+    $: configValid = event.amount && event.pattern && event.choose && (event.choose === "all" || event.devices);
 </script>
 
 <Modal bind:showModal>
@@ -82,10 +82,10 @@
                     <label><input type="radio" name="squirter_mode" bind:group={event.choose} value="oneOf">One of</label>
 
                     {#if event.choose !== "all"}
-                        {#if event.squirters}
-                            {#each event.squirters as squirter}
-                                <FancyButton --bg="hsl(100, 0%, 50%)" on:click={()=>removeSquirter(squirter)}>
-                                    {squirterName(squirter)}
+                        {#if event.devices}
+                            {#each event.devices as device}
+                                <FancyButton --bg="hsl(100, 0%, 50%)" on:click={()=>removeSquirter(device)}>
+                                    {squirterName(device)}
                                     <span class="material-symbols-outlined btn-text">close_small</span>
                                 </FancyButton>
                             {/each}
