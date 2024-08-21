@@ -85,6 +85,6 @@ func setupLogging() error {
 
 func catchCrashes() {
 	if r := recover(); r != nil {
-		log.Printf("Panic: %v", r)
+		log.Fatalf("Panic: %v", r)
 	}
 }
