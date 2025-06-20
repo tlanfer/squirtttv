@@ -33,8 +33,7 @@ jobs:
             %LocalAppData%\go-build
             ~/go/pkg/mod
           key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
-          restore-keys: |
-            ${{ runner.os }}-go-
+          restore-keys: ${{ runner.os }}-go-
             
       - name: Build
         run: cd companion && go generate ./... && go build -ldflags -H=windowsgui -o ../companion.exe ./cmd/companion
