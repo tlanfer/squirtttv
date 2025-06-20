@@ -2,10 +2,12 @@
     import FancyButton from "./FancyButton.svelte";
 
     export let addEvent;
+
+    export let helpText = "Add as many events as you want. Exact matching events will be preferred. For events matching 'at least' amounts, the highest amount that still matches will be used.";
 </script>
 
 <p class="help">
-    Add as many events as you want. Exact matching events will be preferred. For events matching "at least" amounts, the highest amount that still matches will be used.
+    {helpText}
 </p>
 
 <div id="eventPage">

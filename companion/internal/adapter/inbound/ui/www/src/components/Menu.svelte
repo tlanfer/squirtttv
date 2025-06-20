@@ -20,6 +20,7 @@ import Version from "./Version.svelte";
     <li><a href="/resubs1">Resubs <span class="sub">Tier 1</span></a></li>
     <li><a href="/resubs2">Resubs <span class="sub">Tier 2</span></a></li>
     <li><a href="/resubs3">Resubs <span class="sub">Tier 3</span></a></li>
+    <li><a href="/chat">Chat</a></li>
 </ul>
 
 <h2>Status</h2>

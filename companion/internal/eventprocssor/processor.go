@@ -46,6 +46,3 @@ func (p *processor) receive() {
 		cooldownEnd = time.Now().Add(time.Duration(p.config.Settings.GlobalCooldown))
 	}
 }
-
-func (p *processor) processMessage(_ internal.ChatMessage) {
-}

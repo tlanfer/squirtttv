@@ -1,6 +1,7 @@
 package config
 
 import (
+	"companion/internal"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -34,6 +35,8 @@ type Events struct {
 	Resubt2 []Event `json:"resubt2" yaml:"resubt2"`
 	Resubt3 []Event `json:"resubt3" yaml:"resubt3"`
 	Gifts   []Event `json:"gifts" yaml:"gifts"`
+
+	ChatMessage []ChatMessage `json:"chat" yaml:"chat"`
 }
 
 type Event struct {
@@ -42,6 +45,14 @@ type Event struct {
 	Pattern SquirtPattern `json:"pattern" yaml:"pattern"`
 	Choose  string        `json:"choose" yaml:"choose"`
 	Devices []string      `json:"devices" yaml:"devices"`
+}
+
+type ChatMessage struct {
+	Trigger string              `json:"trigger" yaml:"trigger"`
+	Roles   []internal.ChatRole `json:"roles" yaml:"roles"`
+	Pattern SquirtPattern       `json:"pattern" yaml:"pattern"`
+	Choose  string              `json:"choose" yaml:"choose"`
+	Devices []string            `json:"devices" yaml:"devices"`
 }
 
 type Duration time.Duration

@@ -6,6 +6,7 @@ import ResubsT1 from "./pages/ResubsT1.svelte";
 import Gifts from "./pages/Gifts.svelte";
 import ResubsT3 from "./pages/ResubsT3.svelte";
 import ResubsT2 from "./pages/ResubsT2.svelte";
+import ChatMessages from "./pages/ChatMessages.svelte";
 
 export default [
     {
@@ -53,5 +54,10 @@ export default [
         title: "Resubs Tier 3",
         path:"/resubs3",
         component: ResubsT3,
+    },
+    {
+        title: "Chat Messages",
+        path: "/chat",
+        component: ChatMessages,
     }
 ];

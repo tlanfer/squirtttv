@@ -8,10 +8,10 @@ import (
 	"time"
 )
 
-func squirt(ev config.Event) {
+func squirt(choose string, devices []string, pattern config.SquirtPattern) {
 	var hosts []string
 
-	switch ev.Choose {
+	switch choose {
 	case "all":
 		dv := config.Get().Devices
 		for _, device := range dv {
@@ -19,13 +19,13 @@ func squirt(ev config.Event) {
 		}
 
 	case "allOf":
-		hosts = ev.Devices
+		hosts = devices
 
 	case "oneOf":
-		if len(ev.Devices) == 0 {
-			log.Println("No devices to squirt for event", ev)
+		if len(devices) == 0 {
+			log.Println("No devices to squirt for event")
 		} else {
-			hosts = []string{ev.Devices[rand.Intn(len(ev.Devices))]}
+			hosts = []string{devices[rand.Intn(len(devices))]}
 		}
 	}
 
@@ -34,7 +34,7 @@ func squirt(ev config.Event) {
 		squirters = append(squirters, squirter.Squirter{Host: host})
 	}
 
-	AddToQueue(ev.Pattern, squirters)
+	AddToQueue(pattern, squirters)
 }
 
 func sendPattern(p config.SquirtPattern, devices []squirter.Squirter) {

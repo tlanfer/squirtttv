@@ -28,6 +28,6 @@ func (p *processor) processEvent(event internal.StreamEvent) {
 
 	ev := findMatch(event.Amount, events)
 	if ev != nil {
-		squirt(*ev)
+		squirt(ev.Choose, ev.Devices, ev.Pattern)
 	}
 }

@@ -16,6 +16,7 @@ import (
 	"companion/internal/adapter/outbound/exchangerate"
 	"companion/internal/adapter/outbound/scanner"
 	"companion/internal/eventprocssor"
+	"errors"
 	"io"
 	"log"
 	"net/http"
@@ -54,7 +55,11 @@ func main() {
 		Handler: mux,
 	}
 
-	go srv.ListenAndServe()
+	go func() {
+		if err := srv.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
+			log.Printf("ListenAndServe failed: %v", err)
+		}
+	}()
 
 	events := make(chan internal.StreamEvent)
 	messages := make(chan internal.ChatMessage)

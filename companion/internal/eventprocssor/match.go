@@ -1,6 +1,7 @@
 package eventprocssor
 
 import (
+	"companion/internal"
 	"companion/internal/config"
 )
 
@@ -22,4 +23,13 @@ func findMatch(amount float64, events []config.Event) *config.Event {
 	}
 
 	return bestEvent
+}
+
+func isRoleMatch(messageRole internal.ChatRole, eventRoles []internal.ChatRole) bool {
+	for _, role := range eventRoles {
+		if messageRole == role {
+			return true
+		}
+	}
+	return false
 }
