@@ -2,6 +2,10 @@
 
 [![GitHub release](https://img.shields.io/github/release/tlanfer/squirtttv?include_prereleases=&sort=semver&color=blue)](https://github.com/tlanfer/squirtttv/releases)
 
+## Update 20.07.2025
+
+Added a new feature: You can now react to chat messages that contain a specific text.
+
 ## Update 07.07.2024
 
 Brand new version, comes with a fancy little UI to make setup easier. No more fiddling with yaml files 🎉
