@@ -16,8 +16,9 @@ import (
 func New(events chan<- internal.StreamEvent) {
 	c := config.Get()
 	s := streamelements{
-		token:  c.Settings.Streamelements,
-		events: events,
+		token:    c.Settings.Streamelements,
+		events:   events,
+		currency: c.Settings.BaseCurrency,
 	}
 	config.Subscribe(func(c config.Config) {
 		if c.Settings.Streamelements == s.token {
@@ -96,7 +97,7 @@ func (s streamelements) Connect() {
 		}
 
 		originalAmount := event.Data.Amount
-		finalAmount := exchangerate.Convert(originalAmount, "usd")
+		finalAmount := exchangerate.Convert(originalAmount, s.currency)
 		finalAmount = float64(int(finalAmount*100)) / 100
 
 		s.events <- internal.StreamEvent{
